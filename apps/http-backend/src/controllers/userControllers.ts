@@ -1,20 +1,45 @@
 import { Request, Response } from "express"
 import jwt from 'jsonwebtoken'
+import { db } from "@repo/db/db"
+import {JWT_SECRET} from '@repo/backend-common/config'
 
-export const signUp=(req:Request,res:Response)=>{
+export const signUp=async (req:Request,res:Response)=>{
 
 const {username, email, password}=req.body
 
-
 try {
-  
-    //existing email
+const existingUser=await db.user.findFirst({
+    where:{
+        email:email
+    }
+})
 
+if(existingUser){
+    res.status(400).json({
+    msg:"user/email already exists"
+    })
+    return
+}
 
+const user=await db.user.create({
+    data:{
+        username:username,
+        email:email,
+        password:password
+    }
+})
 
-
-//create new user
-
+if(user){
+    res.status(200).json({
+    msg:"user created",
+    data:{
+        id:user.id,
+        username:user.username,
+        email:user.email
+    }
+    })
+    return
+}
     
 } 
 catch (e) {
@@ -32,23 +57,33 @@ catch (e) {
 
 
 
-export const login=(req:Request,res:Response)=>{
+export const login=async(req:Request,res:Response)=>{
 
 const {email, password}=req.body
 
 try {
-  
-    //existing email
+    
+   const existingUser=await db.user.findFirst({
+    where:{
+        email:email
+    }
+  })
 
-
-    //check passoword
-
-
-const token=jwt.sign({userId:"123"}, process.env.JWT_SECRET as string)
-res.status(200).json({
+  if(!existingUser){
+    res.status(400).json({
+    msg:"user not found"
+    })
+    return
+  }
+   
+const token=jwt.sign({userId:existingUser.id}, JWT_SECRET as string)
+if(existingUser.password===password){
+    res.status(200).json({
+    msg:"logged in",
     token
-})
-return
+    })
+    return
+}
 
     
 } catch (e) {
@@ -56,18 +91,14 @@ return
     res.status(400).json({
     msg:"api error"
     })
-    return
-    
+    return 
 }
-
 }
 
 
 export const logout=(req:Request, res:Response)=>{
 
     try {
-    
-        
     res.status(200).json({
     msg:"logout successfully"
     })

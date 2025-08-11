@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { NewRequest } from './globalTypes'
+import { JWT_SECRET } from '@repo/backend-common/config'
 
 export const middleware=(req:NewRequest,res:Response,next:NextFunction)=>{
 
@@ -25,7 +26,7 @@ export const middleware=(req:NewRequest,res:Response,next:NextFunction)=>{
     return
  }
 
- const decoded=jwt.verify(token, process.env.JWT_SECRET as string)
+ const decoded=jwt.verify(token, JWT_SECRET as string)
 
 if (decoded && typeof decoded !== "string") {
   (req as NewRequest).userId = decoded.userId as string;

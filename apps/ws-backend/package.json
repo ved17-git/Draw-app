@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@repo/typescript-config": "*",
-    "ws": "^8.18.3"
+    "express": "^5.1.0",
+    "ws": "^8.18.3",
+    "@repo/db":"*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/ws": "^8.18.1"
+    "@types/ws": "^8.18.1",
+    "@repo/backend-common":"*"
+    
   }
 }
