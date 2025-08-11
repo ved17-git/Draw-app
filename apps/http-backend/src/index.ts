@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import { userRouter } from './routes/userRoutes';
+import {roomRouter} from './routes/roomRouter'
+
+
 require('dotenv').config()
 
 
@@ -12,6 +15,8 @@ app.use(cors())
 const port=8000
 
 app.use('/', userRouter)
+app.use('/', roomRouter)
+
 app.get("/", (req,res)=>{
     res.json({
         msg:"dawg"

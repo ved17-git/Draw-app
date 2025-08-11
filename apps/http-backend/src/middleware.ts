@@ -29,7 +29,7 @@ export const middleware=(req:NewRequest,res:Response,next:NextFunction)=>{
  const decoded=jwt.verify(token, JWT_SECRET as string)
 
 if (decoded && typeof decoded !== "string") {
-  (req as NewRequest).userId = decoded.userId as string;
+  (req as NewRequest).userId = decoded.userId as number;
   next();
 }
     
