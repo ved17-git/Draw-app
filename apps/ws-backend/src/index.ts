@@ -65,6 +65,18 @@ console.log(`listening ws on ${port}`);
                 user.rooms = user.rooms.filter(room => room !== parsedData.roomId)
             }
 
+            if(parsedData.type=="chat"){
+               
+                localDB.forEach(x=>{
+                    if(x.rooms.includes(parsedData.roomId)){
+                        socket.send(JSON.stringify({
+                            message:parsedData.message
+                        }))
+                    }
+                }) 
+
+            }
+
             
         })
 
