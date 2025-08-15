@@ -1,6 +1,7 @@
 import WebSocket, { WebSocketServer } from 'ws';
 import { Request } from 'express';
 import { verifyToken } from './verify';
+import { db } from '@repo/db/db';
 
 const port=8001
 const wss=new WebSocketServer({port:port})
@@ -43,7 +44,7 @@ wss.on("connection",(socket, req)=>{
 console.log(`listening ws on ${port} joined user ${userId}`);
 
 
-        socket.on("message",(data)=>{
+        socket.on("message", async (data)=>{
             
             //@ts-ignore
             const parsedData=JSON.parse(data)
@@ -62,17 +63,30 @@ console.log(`listening ws on ${port} joined user ${userId}`);
                     return
                 }
                 user.rooms = user.rooms.filter(room => room !== parsedData.roomId)
-                
             }
 
+
+
+
             if(parsedData.type==="chat"){
+
+                const roomId = String(parsedData.roomId)
+                
+                    await db.chats.create({
+                        data:{
+                            roomId:Number(roomId),
+                            userId:userId,
+                            message:parsedData.message
+                        }
+                    })
+
                
                 localDB.forEach(x=>{
                     if(x.rooms.includes(parsedData.roomId)){
                         x.socket.send(JSON.stringify({
                             type:"chat",
                             message:parsedData.message,
-                            roomId:parsedData.roomId
+                            roomId
                         }))
                     }
                 }) 
