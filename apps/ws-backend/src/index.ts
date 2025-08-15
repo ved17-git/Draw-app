@@ -40,21 +40,20 @@ wss.on("connection",(socket, req)=>{
 
 
 
-    
+console.log(`listening ws on ${port} joined user ${userId}`);
 
-console.log(`listening ws on ${port}`);
 
         socket.on("message",(data)=>{
             
-            if(typeof data !="string"){
-                return
-            }
+            //@ts-ignore
             const parsedData=JSON.parse(data)
+            
 
             if(parsedData.type==="join_room"){
-                const user=localDB.find(x => x.userId==userId)
-                //@ts-ignore
+                const user=localDB.find(x => x.socket===socket)
                 user?.rooms.push(parsedData.roomId)
+                console.log(localDB.length);
+                
             }
 
             if(parsedData.type==="leave_room"){
@@ -63,18 +62,20 @@ console.log(`listening ws on ${port}`);
                     return
                 }
                 user.rooms = user.rooms.filter(room => room !== parsedData.roomId)
+                
             }
 
-            if(parsedData.type=="chat"){
+            if(parsedData.type==="chat"){
                
                 localDB.forEach(x=>{
                     if(x.rooms.includes(parsedData.roomId)){
-                        socket.send(JSON.stringify({
-                            message:parsedData.message
+                        x.socket.send(JSON.stringify({
+                            type:"chat",
+                            message:parsedData.message,
+                            roomId:parsedData.roomId
                         }))
                     }
                 }) 
-
             }
 
             
