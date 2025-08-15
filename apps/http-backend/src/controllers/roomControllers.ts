@@ -47,3 +47,33 @@ export const createRoom=async(req:NewRequest,res:Response)=>{
     }
 
 }
+
+export const getChats=async(req:NewRequest,res:Response)=>{
+    
+    const roomId=Number(req.params.roomId)
+
+    try {
+    const chats=await db.chats.findMany({
+       where:{
+         roomId:roomId
+       },
+       orderBy:{
+        id:"desc"
+       },
+       take:50
+    })
+
+    res.status(400).json({
+        msg:"chats",
+        chats
+    })
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({
+            msg:"api error",
+        })
+        
+    }
+
+}
