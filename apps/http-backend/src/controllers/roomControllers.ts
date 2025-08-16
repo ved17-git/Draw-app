@@ -45,8 +45,54 @@ export const createRoom=async(req:NewRequest,res:Response)=>{
         })
         return
     }
+}
+
+
+export const joinRoom=async(req:NewRequest,res:Response)=>{
+
+    const {name}=req.body
+    const userId=req.userId as number
+
+    try {
+
+        const exists=await db.rooms.findFirst({
+            where:{
+                name:name
+            }
+        })
+
+        if(exists){
+        res.status(200).json({
+            msg:"room exists",
+            exists:{
+                id:exists.id,
+                createdAt:exists.createdAt
+            }
+
+        })
+        return
+        }
+        else{
+        res.status(400).json({
+            msg:"room not found, create new room"
+        })
+        return 
+        }
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({
+            msg:"api error"
+        })
+        return
+    }
+
+
 
 }
+
+
+
 
 export const getChats=async(req:NewRequest,res:Response)=>{
     
