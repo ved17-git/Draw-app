@@ -6,6 +6,6 @@ import { getChats } from '../controllers/roomControllers'
 import { joinRoom } from '../controllers/roomControllers'
 import { middleware } from '../middleware'
 
-roomRouter.post('/createRoom',middleware, createRoom)
-roomRouter.get('/chats/:roomId',middleware, getChats)
-roomRouter.post('/joinRoom',middleware, joinRoom)
+roomRouter.post('/createRoom', createRoom)
+roomRouter.get('/chats/:roomId', getChats)
+roomRouter.post('/joinRoom', joinRoom)
