@@ -1,6 +1,7 @@
 import Login from "./(auth)/login/page";
 import { cookies } from "next/headers";
 import { logout } from "./(auth)/logout/action";
+import LogoutButton from "../Components/LogoutButton";
 
 
 export default async function Home() {
@@ -18,9 +19,8 @@ export default async function Home() {
     <>
        <div>
          create room
-         <form action={logout}>
-           <button type="submit" className="bg-red-500 p-1 rounded-lg text-white">Logout</button> 
-         </form>
+         <LogoutButton/>
+        
        </div>
     </>
   );

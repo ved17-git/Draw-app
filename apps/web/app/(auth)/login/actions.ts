@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { BACKEND_URL } from "../../config"
 import { cookies } from "next/headers"
 
-export const login=async(formData:FormData):Promise<void>=>{
+export const login=async(previousState:unknown, formData:FormData):Promise<string |void>=>{
 
 const email=formData.get("email")
 const password=formData.get("password")
@@ -22,7 +22,7 @@ const res = await fetch(`${BACKEND_URL}/login`,{
 
 
 if(!res.ok){
-  return 
+  return "Login error"
 }
 
 const data=await res.json()
