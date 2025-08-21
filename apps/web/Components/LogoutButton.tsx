@@ -11,10 +11,10 @@ function LogoutButton() {
   return (
     <>
         <form action={action}>
-        <button type="submit" className="bg-red-500 p-2 rounded-lg text-white">
-          {isLoading?"Loading...":"Logout"}
-        </button> 
-        {data? "logout error":null}
+            <button type="submit" className="bg-red-500 p-2 rounded-lg text-white">
+            {isLoading?"Loading...":"Logout"}
+            </button> 
+            {data? "logout error":null}
         </form>
     </>
   );

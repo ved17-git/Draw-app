@@ -1,7 +1,7 @@
 import Login from "./(auth)/login/page";
 import { cookies } from "next/headers";
-import { logout } from "./(auth)/logout/action";
 import LogoutButton from "../Components/LogoutButton";
+import Room from "../Components/Room";
 
 
 export default async function Home() {
@@ -18,9 +18,8 @@ export default async function Home() {
   return (
     <>
        <div>
-         create room
          <LogoutButton/>
-        
+         <Room token={token.value}/>
        </div>
     </>
   );
