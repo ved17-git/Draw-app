@@ -8,4 +8,4 @@ import { middleware } from '../middleware'
 
 roomRouter.post('/createRoom', createRoom)
 roomRouter.get('/chats/:roomId', getChats)
-roomRouter.post('/joinRoom', joinRoom)
+roomRouter.get('/joinRoom/:room', joinRoom)

@@ -50,7 +50,7 @@ export const createRoom=async(req:NewRequest,res:Response)=>{
 
 export const joinRoom=async(req:NewRequest,res:Response)=>{
 
-    const {name}=req.body
+    const name=req.params.room
     const userId=req.userId as number
 
     try {
