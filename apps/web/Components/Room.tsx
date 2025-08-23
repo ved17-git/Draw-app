@@ -36,7 +36,7 @@ function Room({token}:{token?:string}) {
 
       socket?.send(JSON.stringify(msg))
 
-      router.push(`/${joinRoom}`)
+      router.push(`/${id}`)
   }
 
 
