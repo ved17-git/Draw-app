@@ -1,22 +1,37 @@
-import React from 'react'
-import { BACKEND_URL } from '../config'
+import React from "react";
+import { BACKEND_URL } from "../config";
+import { redirect } from "next/navigation";
 
-async function InRoom({params}) {
+async function InRoom({ params }: { params: { room: string } }) {
+  const res = await fetch(`${BACKEND_URL}/joinRoom/${params.room}`, {
+    method: "GET",
+  });
 
-    const res=await fetch(`${BACKEND_URL}/joinRoom/ved`,{
-        method:"GET"
-    })    
+  if (!res.ok) {
+    redirect("/");
+  }
+  const data = await res.json();
 
-    if(!res.ok){
-        return "didnt fetch"
-    }
-    const data=await res.json()
-    console.log(data);
+  const id = data.exists.id;
+  console.log(id);
 
-    
   return (
-    <div>InRoom</div>
-  )
+    <>
+      <div>InRoom {params.room}</div>
+       
+
+       <div>
+           <p>Messages</p>
+
+           <div>
+            <input type="text" placeholder="send messages"/> 
+            <button>send</button>
+           </div>
+         
+       </div>
+
+    </>
+  );
 }
 
-export default InRoom
+export default InRoom;
