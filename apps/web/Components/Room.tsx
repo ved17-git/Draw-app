@@ -42,9 +42,7 @@ function Room({token}:{token?:string}) {
 
   useEffect(()=>{
 
-   
     const ws=new WebSocket(`${WS_URL}/join?token=${token}`)
-
     ws.onopen=()=>{
         setSocket(ws)
         console.log("connected");

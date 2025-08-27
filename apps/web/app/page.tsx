@@ -18,8 +18,15 @@ export default async function Home() {
   return (
     <>
        <div>
+          
          <LogoutButton/>
-         <Room token={token.value}/>
+         {/* <Room token={token.value}/> */}
+
+         <div className="mt-3">
+            <input type="text" placeholder="Join Room" className="border-[1px]" />
+            <button type="submit" className="bg-black text-white">Join Room</button>
+         </div>
+
        </div>
     </>
   );
