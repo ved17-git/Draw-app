@@ -16,21 +16,17 @@ async function GetChats({id}:{id:number}) {
             "Content-Type":"application/json"
         }
     })
-    console.log(res);
     
     if(!res.ok){
         return <div>Fetching error </div>
     }
-    const data=await res.json()
-    console.log(data);
+    const data=await res.json()    
     
-    
-   
+
 
   return (
     <>
       <div>All messages</div>
-      {/* {data.chats} */}
       {data.chats.map((item:chats)=>(
         <div key={item.id}>
             <p>{item.message}</p>

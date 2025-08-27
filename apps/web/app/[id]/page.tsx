@@ -1,6 +1,6 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import GetChats from "../../Components/GetChats";
+import SendChats from "../../Components/SendChats";
 
 
 async function InRoom({ params }: { params: {id:number} }) {
@@ -9,17 +9,12 @@ async function InRoom({ params }: { params: {id:number} }) {
 
   return (
     <>
-      <div>InRoom {params.id}</div>
+      <div>Currently in Room {params.id}</div>
        
 
        <div>
-           <GetChats id={params.id}/>
-
-           <div>
-            <input type="text" placeholder="send messages"/> 
-            <button>send</button>
-           </div>
-         
+          <GetChats id={params.id}/>
+          <SendChats/>
        </div>
 
     </>
