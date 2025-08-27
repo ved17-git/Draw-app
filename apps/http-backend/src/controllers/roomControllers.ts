@@ -109,7 +109,7 @@ export const getChats=async(req:NewRequest,res:Response)=>{
        take:50
     })
 
-    res.status(400).json({
+    res.status(200).json({
         msg:"chats",
         chats
     })
