@@ -17,15 +17,9 @@ export default async function Home() {
       
   return (
     <>
-       <div>
-          
-         <LogoutButton/>
-
-
-         <JoinRoom token={token.value}/>
-
-
-
+       <div>      
+        <LogoutButton/>
+        <JoinRoom token={token.value}/>
        </div>
     </>
   );

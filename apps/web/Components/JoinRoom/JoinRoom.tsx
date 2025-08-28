@@ -1,7 +1,7 @@
 "use client"
 import { useSocket } from "../../hooks/useSocket";
 import {useState} from 'react'
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getRoomId } from "./action";
 import { useActionState } from "react";
 
@@ -42,7 +42,7 @@ function JoinRoom({token}:{token?:string}) {
               </button>
          </div>
       </form>
-         {error && "Room not found"}
+      {error && "Room not found"}
     </>
   ); 
 }

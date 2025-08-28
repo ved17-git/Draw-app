@@ -1,6 +1,17 @@
+"use client"
 import React from "react";
+import { useSocket } from "../hooks/useSocket";
+import {useEffect, useState} from 'react'
 
-function SendChats() {
+function SendChats({token}:{token?:string}) {
+
+  const {socket}=useSocket(token)
+
+  // const [messages,setMessages]=useState("")
+  console.log(socket);
+  
+   
+
   return (
     <>
     

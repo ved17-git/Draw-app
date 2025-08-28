@@ -1,6 +1,5 @@
 "use server"
 import { BACKEND_URL } from "../../app/config"
-import { redirect } from "next/navigation"
 
 
 export const getRoomId=async(name:string)=>{
