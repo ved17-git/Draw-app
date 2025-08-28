@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 
 
 export const getRoomId=async(name:string)=>{
+    
 
   const res=await fetch(`${BACKEND_URL}/joinRoom/${name}`,{
     method:"GET",
@@ -11,11 +12,12 @@ export const getRoomId=async(name:string)=>{
       "Content-Type":"application/json"
     }
   })
+  
 
   if(!res.ok){    
-    redirect('/')
+    return  
   }
 
   const data=await res.json()
-  return data
+  return data?.exists?.id
 }
