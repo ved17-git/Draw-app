@@ -1,7 +1,7 @@
 import Login from "./(auth)/login/page";
 import { cookies } from "next/headers";
 import LogoutButton from "../Components/LogoutButton";
-import Room from "../Components/Room";
+import JoinRoom from "../Components/JoinRoom";
 
 
 export default async function Home() {
@@ -20,12 +20,11 @@ export default async function Home() {
        <div>
           
          <LogoutButton/>
-         {/* <Room token={token.value}/> */}
 
-         <div className="mt-3">
-            <input type="text" placeholder="Join Room" className="border-[1px]" />
-            <button type="submit" className="bg-black text-white">Join Room</button>
-         </div>
+
+         <JoinRoom token={token.value}/>
+
+
 
        </div>
     </>
