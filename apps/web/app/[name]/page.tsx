@@ -1,9 +1,6 @@
 import React from "react";
 import GetChats from "../../Components/GetChats";
-import SendChats from "../../Components/SendChats";
 import { BACKEND_URL } from "../config";
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 
 async function InRoom({ params }: { params: Promise<{ name: string }> }) {
@@ -21,15 +18,8 @@ async function InRoom({ params }: { params: Promise<{ name: string }> }) {
   }
 
   const data=await res.json()
-  console.log(data);
-
-  const cookieStore=await cookies()
-  const token=cookieStore.get('token')?.value
   
-  console.log(token);
   
-
-    
 
   return (
     <>
