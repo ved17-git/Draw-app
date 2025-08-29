@@ -103,9 +103,6 @@ export const getChats=async(req:NewRequest,res:Response)=>{
        where:{
          roomId:roomId
        },
-       orderBy:{
-        id:"desc"
-       },
        take:50
     })
 

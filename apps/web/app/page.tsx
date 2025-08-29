@@ -19,7 +19,7 @@ export default async function Home() {
     <>
        <div>      
         <LogoutButton/>
-        <JoinRoom token={token.value}/>
+        <JoinRoom />
        </div>
     </>
   );

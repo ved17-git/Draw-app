@@ -5,36 +5,72 @@ import {useEffect, useState} from 'react'
 
 
 
-function SendChats({token, messages}:{token?:string, messages:{message:string}[]}) {
+function SendChats({token, messages, id}:{token?:string, messages:{message:string}[], id:number }) {
 
   const {socket}=useSocket(token)
-  console.log(socket);
+  const [chats,setChats]=useState(messages)
+  const [currentMessage,setCurrentMessage]=useState("")
 
-  console.log(messages);
+  useEffect(()=>{
+    
+   if(socket){
+   
+    //always first join the room 
+    socket.send(JSON.stringify({
+      type:"join_room",
+      roomId:id
+    }))
+
+
+    //start listening to the incoming chats 
+    socket.onmessage=(event)=>{
+       const parsedData=JSON.parse(event.data)
+       console.log(parsedData);
+       if(parsedData.type==="chat"){
+           setChats(c => [...c, {message:parsedData.message}])
+       }
+    }
+   }
+
+   return () => { 
+    if (socket) socket.onmessage = null; 
+  };
+
+  },[socket, id])
+
+
+  const handleSend=()=>{
+     socket?.send(JSON.stringify({
+      type:"chat",
+      message:currentMessage,
+      roomId:id
+     }))
+  }
   
-
-  
-
    
 
   return (
     <>
 
     {
-      messages.map((item,key)=>(
+      chats.map((item,key)=>(
         <div key={key}>
            {item.message}
         </div>
       ))
     }
+
     
     <div className="flex flex-col gap-2 justify-center items-center">
       <div>SendChats</div>
         <div>
-            <input type="text" placeholder="send messages" className="border-[1px]"/> 
-            <button className="bg-black text-white">send</button>
+            <input type="text" placeholder="send messages" className="border-[1px]" value={currentMessage} onChange={(e)=>{setCurrentMessage(e.target.value)}}/> 
+            <button className="bg-black text-white" onClick={handleSend}>send</button>
         </div>
     </div>
+
+
+
     </>
   );
 }

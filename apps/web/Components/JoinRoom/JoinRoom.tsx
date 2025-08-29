@@ -1,14 +1,12 @@
 "use client"
-import { useSocket } from "../../hooks/useSocket";
 import {useState} from 'react'
 import { useRouter } from "next/navigation";
 import { getRoomId } from "./action";
 import { useActionState } from "react";
 
 
-function JoinRoom({token}:{token?:string}) {
+function JoinRoom() {
 
-  const {socket}=useSocket(token)
   const [roomName, setRoomName]=useState("")
   const [error,setError]=useState(false)
   const router=useRouter()
@@ -21,13 +19,9 @@ function JoinRoom({token}:{token?:string}) {
        setError(true)
        return
     }
+
+    //here if u join the room it creates another ws connection
      console.log(id); 
-     
-     socket?.send(JSON.stringify({
-      type:"join_room",
-      roomId:id
-     }))
-     
      router.push(`${roomName}`)
   }
   

@@ -18,8 +18,6 @@ async function GetChats({id}:{id:number}) {
         return <div>Fetching error </div>
     }
     const data=await res.json()    
-    console.log(data);
-
     const cookieStore=await cookies()
     const token=cookieStore.get('token')?.value
     
@@ -28,7 +26,7 @@ async function GetChats({id}:{id:number}) {
 
   return (
     <>
-      <SendChats messages={data.chats} token={token}/>
+      <SendChats messages={data.chats} token={token} id={id}/>
     </>
   );
 }
