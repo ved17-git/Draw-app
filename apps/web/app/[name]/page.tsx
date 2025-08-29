@@ -6,9 +6,10 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 
-async function InRoom({ params }:{params:{name:string}}) {
+async function InRoom({ params }: { params: Promise<{ name: string }> }) {
 
-  const res=await fetch(`${BACKEND_URL}/joinRoom/${params.name}`,{
+  const { name } = await params; 
+  const res=await fetch(`${BACKEND_URL}/joinRoom/${name}`,{
     method:"GET",
     headers:{
       "Content-Type":"application/json"
@@ -16,7 +17,7 @@ async function InRoom({ params }:{params:{name:string}}) {
   })
 
   if(!res.ok){
-    redirect('/')
+      return "dawg"
   }
 
   const data=await res.json()
@@ -32,7 +33,7 @@ async function InRoom({ params }:{params:{name:string}}) {
 
   return (
     <>
-      <div>Currently in Room {params.name}</div>
+      <div>Currently in Room {name}</div>
        
        <div>
           <GetChats id={data?.exists?.id}/>

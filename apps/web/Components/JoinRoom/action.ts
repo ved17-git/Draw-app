@@ -1,22 +1,20 @@
 "use server"
+import { redirect } from "next/navigation"
 import { BACKEND_URL } from "../../app/config"
 
 
-export const getRoomId=async(name:string)=>{
+export const getRoomId=async(previousState:unknown, formData:FormData)=>{
+
+  const name=formData.get('name')
     
 
   const res=await fetch(`${BACKEND_URL}/joinRoom/${name}`,{
     method:"GET",
-    headers:{
-      "Content-Type":"application/json"
-    }
   })
   
 
   if(!res.ok){    
-    return  
+    return "Room not found"
   }
-
-  const data=await res.json()
-  return data?.exists?.id
+  redirect(`/${name}`)
 }
