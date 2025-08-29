@@ -16,7 +16,6 @@ async function InRoom({ params }:{params:{name:string}}) {
   })
 
   if(!res.ok){
-    
     redirect('/')
   }
 
@@ -35,10 +34,8 @@ async function InRoom({ params }:{params:{name:string}}) {
     <>
       <div>Currently in Room {params.name}</div>
        
-
        <div>
           <GetChats id={data?.exists?.id}/>
-          <SendChats token={token}/>
        </div>
 
     </>

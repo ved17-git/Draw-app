@@ -1,14 +1,11 @@
 import React from "react";
 import { BACKEND_URL } from "../app/config";
+import SendChats from "./SendChats";
+import { cookies } from "next/headers";
 
-
-interface chats{
-id:number,
-message:string,
-userId:number
-}
 
 async function GetChats({id}:{id:number}) {
+
     
     const res=await fetch(`${BACKEND_URL}/chats/${id}`,{
         method:"GET",
@@ -21,17 +18,17 @@ async function GetChats({id}:{id:number}) {
         return <div>Fetching error </div>
     }
     const data=await res.json()    
+    console.log(data);
+
+    const cookieStore=await cookies()
+    const token=cookieStore.get('token')?.value
+    
     
 
 
   return (
     <>
-      <div>All messages</div>
-      {data.chats.map((item:chats)=>(
-        <div key={item.id}>
-            <p>{item.message}</p>
-        </div>
-      ))}
+      <SendChats messages={data.chats} token={token}/>
     </>
   );
 }

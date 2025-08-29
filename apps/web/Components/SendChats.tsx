@@ -3,17 +3,30 @@ import React from "react";
 import { useSocket } from "../hooks/useSocket";
 import {useEffect, useState} from 'react'
 
-function SendChats({token}:{token?:string}) {
+
+
+function SendChats({token, messages}:{token?:string, messages:{message:string}[]}) {
 
   const {socket}=useSocket(token)
-
-  // const [messages,setMessages]=useState("")
   console.log(socket);
+
+  console.log(messages);
   
+
+  
+
    
 
   return (
     <>
+
+    {
+      messages.map((item,key)=>(
+        <div key={key}>
+           {item.message}
+        </div>
+      ))
+    }
     
     <div className="flex flex-col gap-2 justify-center items-center">
       <div>SendChats</div>
