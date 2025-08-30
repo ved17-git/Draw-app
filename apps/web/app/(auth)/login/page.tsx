@@ -9,7 +9,7 @@ function Login() {
   return (
     <>
       <div>Login</div>
-        
+
             <form action={action}>
                 <input type="email" name="email" placeholder="email" />
                 <input type="password" name="password" placeholder="password" />
