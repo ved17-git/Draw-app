@@ -1,38 +1,55 @@
 "use client"
-import React, { useEffect } from "react";
-import { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 
 function Canvas() {
-  
-    const canvasRef=useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    useEffect(()=>{
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-        if(canvasRef.current){
+    const ctx = canvas.getContext("2d");
 
-           const canvas=canvasRef.current  //gives us a canvas  (ex: <canvas>...</canvas>)
-           const ctx=canvas.getContext("2d")
-           console.log(canvas);
-           
-           ctx?.strokeRect(100,100,60,60)       //x, y, width, height -> x,y measured from the canvas div, not the whole page
+    let clicked = false;
+    let startX = 0;
+    let startY = 0;
 
-           canvas.addEventListener("mousedown",(e)=>{
-            console.log(e.clientX, e.clientY);
-           })
+    // mousedown
+    canvas.addEventListener("mousedown", (e) => {
+      clicked = true;
+      startX = e.clientX;
+      startY = e.clientY;
+    });
 
-           canvas.addEventListener("mouseup",(e)=>{
-               console.log(e.clientX, e.clientY);  
-           })     
-        }
-    
+    // mouseup
+    canvas.addEventListener("mouseup", (e) => {
+      clicked = false;
+      console.log("Mouse up:", e.offsetX, e.offsetY);
+    });
 
-    },[])
+    // mousemove
+    canvas.addEventListener("mousemove", (e) => {
+      if (!clicked) return;
+      const currentX = e.clientX;
+      const currentY = e.clientY;
+      const width = currentX - startX;
+      const height = currentY - startY;
 
+      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      ctx?.strokeRect(startX, startY, width, height);
+    });
+
+
+  }, []);
 
   return (
     <>
-      <div>Canvas</div>
-      <canvas height={500} width={1000} ref={canvasRef}></canvas>
+      <canvas
+        height={500}
+        width={1000}
+        className="bg-green-300"
+        ref={canvasRef}
+      />
     </>
   );
 }
