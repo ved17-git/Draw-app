@@ -1,16 +1,32 @@
 "use client"
 import React, { useRef, useEffect } from "react";
 
+interface Shapes{
+type:"rect",
+x:number,
+y:number,
+height:number,
+width:number
+}
+
+
 function Canvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const  existingShape:Shapes[]=[]
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-
+    if (!canvas) return;  
     const ctx = canvas.getContext("2d");
-    console.log(ctx?.arc);
-    
+    if(!ctx){
+      return
+    }
+
+    ctx.fillStyle="rgba(0,0,0)";
+    ctx.fillRect(0,0, canvas.width, canvas.height)
+
+
     
 
 
@@ -29,8 +45,17 @@ function Canvas() {
     // mouseup
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
-      // alert(`start: ${startX} ${startY}  end: ${e.clientX} ${e.clientY}`)
-      console.log("Mouse up:", e.offsetX, e.offsetY);
+      const width=startX-e.clientX
+      const height=startY-e.clientY
+
+      existingShape.push({
+        type:"rect",
+        x:startX,
+        y:startY,
+        width:width,
+        height:height
+      })
+
     });
 
     // mousemove
@@ -42,13 +67,15 @@ function Canvas() {
       const height = currentY - startY;
 
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle="rgba(0,0,0)";
+      ctx.fillRect(0,0, canvas.width, canvas.height)
+      ctx?.strokeRect(startX, startY, width, height)
+      ctx.strokeStyle="rgba(255,255,255)"
       
-
-
     });
-
-
   }, []);
+
+
 
 
 
@@ -59,9 +86,10 @@ function Canvas() {
       <canvas
         height={650}
         width={1400}
-        className="bg-neutral-500"
         ref={canvasRef}
       />
+        
+
     </>
   );
 }
