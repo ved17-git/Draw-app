@@ -39,8 +39,8 @@ export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
     // mouseup
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
-      const width=startX-e.clientX
-      const height=startY-e.clientY
+      const width=e.clientX-startX
+      const height=e.clientY-startY
 
       existingShapes.push({
         type:"rect",
@@ -75,7 +75,7 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
       ctx.fillStyle="rgba(0,0,0)";
       ctx.fillRect(0,0, canvas.width, canvas.height);
 
-      existingShapes.map((shape)=>{
+      existingShapes.forEach((shape)=>{
 
         if(shape.type==="rect"){
             ctx.strokeStyle="rgba(255,255,255)"
