@@ -1,5 +1,3 @@
-
-
 interface Shapes{
 type:"rect",
 x:number,
@@ -29,14 +27,15 @@ export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
     let startY = 0;
 
 
-    // mousedown
+
     canvas.addEventListener("mousedown", (e) => {
       clicked = true;
       startX = e.clientX;
       startY = e.clientY;
     });
 
-    // mouseup
+
+
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
       const width=e.clientX-startX
@@ -51,7 +50,8 @@ export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
       })
     });
 
-    // mousemove
+
+
     canvas.addEventListener("mousemove", (e) => {
       if (!clicked) return;
       const currentX = e.clientX;
