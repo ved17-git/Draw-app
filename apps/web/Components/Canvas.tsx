@@ -1,6 +1,7 @@
 "use client"
 import React, { useRef, useEffect } from "react";
 import { initializeDrawing } from "../draw/draw";
+import ShapesButton from "./ShapesButton";
 
 
 
@@ -26,6 +27,7 @@ function Canvas() {
 
   return (
     <>
+    <ShapesButton/>
       <canvas
         height={650}
         width={1400}

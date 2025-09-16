@@ -10,12 +10,12 @@ width:number
 export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
 
     const ctx = canvas.getContext("2d");
-
+     
     if(!ctx){
         return
     }
 
-   const existingShapes:Shapes[]=[]
+    const existingShapes:Shapes[]=[]
 
     ctx.fillStyle="rgba(0,0,0)";
     ctx.fillRect(0,0, canvas.width, canvas.height)
@@ -75,8 +75,7 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
       ctx.fillStyle="rgba(0,0,0)";
       ctx.fillRect(0,0, canvas.width, canvas.height);
 
-      existingShapes.forEach((shape)=>{
-
+      existingShapes.map((shape)=>{
         if(shape.type==="rect"){
             ctx.strokeStyle="rgba(255,255,255)"
             ctx?.strokeRect(shape.x, shape.y, shape.width, shape.height)
