@@ -6,10 +6,10 @@ import ShapesButton from "./ShapesButton";
 interface canvasProps{
   socket:WebSocket ,
   id:number
-  messages:any
+  shapes:any
 }
 
-function Canvas({socket, id, messages}:canvasProps) {
+function Canvas({socket, id, shapes}:canvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
 
@@ -19,9 +19,9 @@ function Canvas({socket, id, messages}:canvasProps) {
     if(!canvasRef.current){
       return
     }
-    initializeDrawing(canvasRef.current, socket, id, messages)
+    initializeDrawing(canvasRef.current, socket, id, shapes)
 
-  }, [canvasRef]);
+  }, [canvasRef, id, shapes, socket]);
 
 
 

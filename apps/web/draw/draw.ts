@@ -7,7 +7,7 @@ width:number
 }
 
 
-export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, messages:Shapes[])=>{
+export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, shapes:Shapes[])=>{
 
     const ctx = canvas.getContext("2d");
      
@@ -15,7 +15,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
         return
     }
 
-    const existingShapes:Shapes[]=messages
+    const existingShapes:Shapes[]=shapes
 
 
           
@@ -34,6 +34,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     ctx.fillStyle="rgba(0,0,0)";
     ctx.fillRect(0,0, canvas.width, canvas.height)
 
+    clearCanvas(existingShapes, canvas, ctx)
 
     let clicked = false;
     let startX = 0;

@@ -6,7 +6,7 @@ import Canvas from "./Canvas";
 
 
 
-function SendChats({token, messages, id}:{token?:string, messages:{message:string}[], id:number }) {
+function SendChats({token, shapes, id}:{token?:string, shapes:any, id:number }) {
 
   const {socket}=useSocket(token)
 
@@ -41,7 +41,7 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
 
   return (
     <>
-       <Canvas socket={socket} id={id} messages={messages}/>
+       <Canvas socket={socket} id={id} shapes={shapes}/>
     </>
   );
 }

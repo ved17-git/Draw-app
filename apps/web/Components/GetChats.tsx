@@ -24,7 +24,7 @@ async function GetChats({id}:{id:number}) {
     
 const shapes = data.chats.map((x: { message: string }) => {
     const msgData = JSON.parse(x.message);
-    return msgData;
+    return msgData.shape;
 });
 
 console.log(shapes);
@@ -32,7 +32,7 @@ console.log(shapes);
 
   return (
     <>
-      <SendChats messages={shapes} token={token} id={id}/>
+      <SendChats shapes={shapes} token={token} id={id}/>
     </>
   );
 }
