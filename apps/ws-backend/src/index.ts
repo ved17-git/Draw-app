@@ -47,7 +47,13 @@ console.log(`listening ws on ${port} joined user ${userId}`);
         socket.on("message", async (data)=>{
             
             //@ts-ignore
-            const parsedData=JSON.parse(data)
+
+            let parsedData
+            if(typeof data !="string"){
+                parsedData=JSON.parse(data.toString())
+            }else{
+                parsedData=JSON.parse(data)
+            }
             
 
             if(parsedData.type==="join_room"){

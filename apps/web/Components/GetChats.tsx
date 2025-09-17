@@ -22,11 +22,17 @@ async function GetChats({id}:{id:number}) {
     const token=cookieStore.get('token')?.value
     
     
+const shapes = data.chats.map((x: { message: string }) => {
+    const msgData = JSON.parse(x.message);
+    return msgData;
+});
+
+console.log(shapes);
 
 
   return (
     <>
-      <SendChats messages={data.chats} token={token} id={id}/>
+      <SendChats messages={shapes} token={token} id={id}/>
     </>
   );
 }

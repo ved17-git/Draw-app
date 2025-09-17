@@ -1,8 +1,7 @@
 "use client"
 import React from "react";
 import { useSocket } from "../hooks/useSocket";
-import {useEffect, useState, useRef} from 'react'
-import { initializeDrawing } from "../draw/draw";
+import {useEffect} from 'react'
 import Canvas from "./Canvas";
 
 
@@ -10,10 +9,8 @@ import Canvas from "./Canvas";
 function SendChats({token, messages, id}:{token?:string, messages:{message:string}[], id:number }) {
 
   const {socket}=useSocket(token)
-  const [chats,setChats]=useState(messages)
-  const [currentMessage,setCurrentMessage]=useState("")
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   
   useEffect(()=>{
     
@@ -25,14 +22,6 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
     }))
 
 
-    //start listening to the incoming chats 
-    socket.onmessage=(event)=>{
-       const parsedData=JSON.parse(event.data)
-       console.log(parsedData);
-       if(parsedData.type==="chat"){
-           setChats(c => [...c, {message:parsedData.message}])
-       }
-    }
    }
 
    return () => { 
@@ -41,34 +30,18 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
   },[socket, id])
 
 
-
-  // const handleSend=()=>{
-  //    socket?.send(JSON.stringify({
-  //     type:"chat",
-  //     message:currentMessage,
-  //     roomId:id
-  //    }))
-  // }
+  
+  if(!socket){
+    return <div>
+      connecting to server
+    </div>
+  }
   
    
 
   return (
     <>
-
-
-      <Canvas socket={socket} id={id}/>
-        
-    
-    {/* <div className="flex flex-col gap-2 justify-center items-center">
-      <div>SendChats</div>
-        <div>
-            <input type="text" placeholder="send messages" className="border-[1px]" value={currentMessage} onChange={(e)=>{setCurrentMessage(e.target.value)}}/> 
-            <button className="bg-black text-white" onClick={handleSend}>send</button>
-        </div>
-    </div> */}
-
-
-
+       <Canvas socket={socket} id={id} messages={messages}/>
     </>
   );
 }

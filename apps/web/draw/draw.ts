@@ -7,7 +7,7 @@ width:number
 }
 
 
-export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
+export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, messages:Shapes[])=>{
 
     const ctx = canvas.getContext("2d");
      
@@ -15,13 +15,26 @@ export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
         return
     }
 
-    const existingShapes:Shapes[]=[]
+    const existingShapes:Shapes[]=messages
+
+
+          
+
+  socket.onmessage=(event)=>{
+    const parsedData=JSON.parse(event.data)
+
+    if(parsedData.type==="chat"){
+      const data=JSON.parse(parsedData.message)
+      existingShapes.push(data.shape)
+      clearCanvas(existingShapes, canvas, ctx)
+    }
+  }
+  
 
     ctx.fillStyle="rgba(0,0,0)";
     ctx.fillRect(0,0, canvas.width, canvas.height)
 
 
-  
     let clicked = false;
     let startX = 0;
     let startY = 0;
@@ -35,22 +48,31 @@ export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
     });
 
 
-
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
       const width=e.clientX-startX
       const height=e.clientY-startY
 
       console.log(startX, startY, width, height);
-      
 
-      existingShapes.push({
+      const shape:Shapes={
         type:"rect",
         x:startX,
         y:startY,
         width:width,
         height:height
-      })
+      }
+      
+      
+      existingShapes.push(shape)
+
+      socket.send(JSON.stringify({
+        type:"chat",
+        message:JSON.stringify({
+          shape
+        }),
+        roomId:id
+      }))
     });
 
 

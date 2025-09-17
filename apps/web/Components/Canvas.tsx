@@ -4,11 +4,12 @@ import { initializeDrawing } from "../draw/draw";
 import ShapesButton from "./ShapesButton";
 
 interface canvasProps{
-  socket:WebSocket | undefined,
+  socket:WebSocket ,
   id:number
+  messages:any
 }
 
-function Canvas({socket, id}:canvasProps) {
+function Canvas({socket, id, messages}:canvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
 
@@ -18,7 +19,7 @@ function Canvas({socket, id}:canvasProps) {
     if(!canvasRef.current){
       return
     }
-    initializeDrawing(canvasRef.current)
+    initializeDrawing(canvasRef.current, socket, id, messages)
 
   }, [canvasRef]);
 
