@@ -2,6 +2,7 @@
 import React from "react";
 import { useSocket } from "../hooks/useSocket";
 import {useEffect, useState} from 'react'
+import Canvas from "./Canvas";
 
 
 
@@ -14,7 +15,6 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
   useEffect(()=>{
     
    if(socket){
-   
     //always first join the room 
     socket.send(JSON.stringify({
       type:"join_room",
@@ -35,7 +35,6 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
    return () => { 
     if (socket) socket.onmessage = null; 
   };
-
   },[socket, id])
 
 
@@ -59,7 +58,7 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
         </div>
       ))
     }
-
+  
     
     <div className="flex flex-col gap-2 justify-center items-center">
       <div>SendChats</div>

@@ -41,6 +41,9 @@ export const initializeDrawing=(canvas:HTMLCanvasElement)=>{
       const width=e.clientX-startX
       const height=e.clientY-startY
 
+      console.log(startX, startY, width, height);
+      
+
       existingShapes.push({
         type:"rect",
         x:startX,

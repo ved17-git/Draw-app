@@ -9,7 +9,7 @@ import { IoTriangleOutline } from "react-icons/io5";
 
 function ShapesButton() {
    
-const [currentShape, setCurrentShape]=useState<"circle" | "rectangle" | "triangle"> ("circle")
+const [currentShape, setCurrentShape]=useState<"circle" | "rectangle" | "triangle" | null>(null)
 
 
 

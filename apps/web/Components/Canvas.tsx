@@ -27,6 +27,7 @@ function Canvas() {
 
   return (
     <>
+
     <ShapesButton/>
       <canvas
         height={650}

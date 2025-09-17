@@ -7,7 +7,7 @@ function JoinRoom() {
   const [data, action, isLoading]=useActionState(getRoomId, undefined)
   
   //u dont have to join the room here using websocket (ex: type:"join_room")
-  //this will create another ws server
+  //this will create another ws server connection
 
   return (
     <>        
@@ -16,7 +16,7 @@ function JoinRoom() {
             <input type="text" placeholder="Join Room" className="border-[1px]" name="name"/>
             <button type="submit" className="bg-black text-white">
                {isLoading? "Joining..." : "Join Room"}
-              </button>
+             </button>
          </div>
       </form>
       {data && data}

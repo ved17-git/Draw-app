@@ -2,6 +2,7 @@ import React from "react";
 import { BACKEND_URL } from "../app/config";
 import SendChats from "./SendChats";
 import { cookies } from "next/headers";
+import Canvas from "./Canvas";
 
 
 async function GetChats({id}:{id:number}) {
