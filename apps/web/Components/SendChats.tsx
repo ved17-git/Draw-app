@@ -1,7 +1,8 @@
 "use client"
 import React from "react";
 import { useSocket } from "../hooks/useSocket";
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
+import { initializeDrawing } from "../draw/draw";
 import Canvas from "./Canvas";
 
 
@@ -12,6 +13,8 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
   const [chats,setChats]=useState(messages)
   const [currentMessage,setCurrentMessage]=useState("")
 
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
   useEffect(()=>{
     
    if(socket){
@@ -38,35 +41,31 @@ function SendChats({token, messages, id}:{token?:string, messages:{message:strin
   },[socket, id])
 
 
-  const handleSend=()=>{
-     socket?.send(JSON.stringify({
-      type:"chat",
-      message:currentMessage,
-      roomId:id
-     }))
-  }
+
+  // const handleSend=()=>{
+  //    socket?.send(JSON.stringify({
+  //     type:"chat",
+  //     message:currentMessage,
+  //     roomId:id
+  //    }))
+  // }
   
    
 
   return (
     <>
 
-    {
-      chats.map((item,key)=>(
-        <div key={key}>
-           {item.message}
-        </div>
-      ))
-    }
-  
+
+      <Canvas socket={socket} id={id}/>
+        
     
-    <div className="flex flex-col gap-2 justify-center items-center">
+    {/* <div className="flex flex-col gap-2 justify-center items-center">
       <div>SendChats</div>
         <div>
             <input type="text" placeholder="send messages" className="border-[1px]" value={currentMessage} onChange={(e)=>{setCurrentMessage(e.target.value)}}/> 
             <button className="bg-black text-white" onClick={handleSend}>send</button>
         </div>
-    </div>
+    </div> */}
 
 
 

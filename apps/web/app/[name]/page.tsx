@@ -1,7 +1,6 @@
 import React from "react";
 import GetChats from "../../Components/GetChats";
 import { BACKEND_URL } from "../config";
-import Canvas from "../../Components/Canvas";
 
 
 async function InRoom({ params }: { params: Promise<{ name: string }> }) {
@@ -24,8 +23,6 @@ async function InRoom({ params }: { params: Promise<{ name: string }> }) {
 
   return (
     <>
-
-       <Canvas/>
        
        <div>
           <GetChats id={data?.exists?.id}/>

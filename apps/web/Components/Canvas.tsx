@@ -3,9 +3,12 @@ import React, { useRef, useEffect } from "react";
 import { initializeDrawing } from "../draw/draw";
 import ShapesButton from "./ShapesButton";
 
+interface canvasProps{
+  socket:WebSocket | undefined,
+  id:number
+}
 
-
-function Canvas() {
+function Canvas({socket, id}:canvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
 
