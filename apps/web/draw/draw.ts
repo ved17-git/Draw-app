@@ -31,8 +31,10 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
   }
   
 
-    ctx.fillStyle="rgba(0,0,0)";
-    ctx.fillRect(0,0, canvas.width, canvas.height)
+    
+   
+
+
 
     clearCanvas(existingShapes, canvas, ctx)
 
@@ -47,7 +49,8 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
       startX = e.clientX;
       startY = e.clientY;
     });
-
+   
+  
 
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
@@ -65,15 +68,15 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
       }
       
       
-      existingShapes.push(shape)
+      // existingShapes.push(shape)
 
-      socket.send(JSON.stringify({
-        type:"chat",
-        message:JSON.stringify({
-          shape
-        }),
-        roomId:id
-      }))
+      // socket.send(JSON.stringify({
+      //   type:"chat",
+      //   message:JSON.stringify({
+      //     shape
+      //   }),
+      //   roomId:id
+      // }))
     });
 
 
@@ -88,8 +91,20 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
       clearCanvas(existingShapes, canvas, ctx)
 
-      ctx?.strokeRect(startX, startY, width, height)
-      ctx.strokeStyle="rgba(255,255,255)"
+      const x=e.clientX
+      const y=e.clientY
+
+        ctx.strokeStyle="rgba(255,255,255)"
+        ctx.beginPath();
+        ctx.moveTo(startX, startY + (y - startY) / 2);
+        ctx.bezierCurveTo(startX, startY, x, startY, x, startY + (y - startY) / 2);
+        ctx.bezierCurveTo(x, y, startX, y, startX, startY + (y - startY) / 2);
+        ctx.closePath();
+        ctx.stroke();
+
+
+      // ctx?.strokeRect(startX, startY, width, height)
+      // ctx.strokeStyle="rgba(255,255,255)"
       
     });
 }
@@ -100,6 +115,20 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle="rgba(0,0,0)";
       ctx.fillRect(0,0, canvas.width, canvas.height);
+           
+
+     ctx.strokeStyle="rgba(255,255,255)"
+        ctx.beginPath();
+      ctx.arc(200, 200, 100, 0, 2 * Math.PI);
+      ctx.stroke();;
+    
+      
+       ctx.strokeStyle="rgba(255,255,255)"
+ctx.beginPath(); // Start a new path
+ctx.moveTo(100, 100); // Move the pen to (30, 50)
+ctx.lineTo(150, 100); // Draw a line to (150, 100)
+ctx.stroke(); // Render the path
+
 
       existingShapes.map((shape)=>{
         if(shape.type==="rect"){

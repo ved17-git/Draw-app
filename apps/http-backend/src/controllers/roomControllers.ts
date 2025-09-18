@@ -91,7 +91,6 @@ export const joinRoom=async(req:NewRequest,res:Response)=>{
 
 }
 
-
 export const getChats=async(req:NewRequest,res:Response)=>{
     
     const roomId=Number(req.params.roomId)

@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from "react";
 import { initializeDrawing } from "../draw/draw";
 import ShapesButton from "./ShapesButton";
 
+
 interface canvasProps{
   socket:WebSocket ,
   id:number
@@ -35,7 +36,7 @@ function Canvas({socket, id, shapes}:canvasProps) {
     <ShapesButton/>
       <canvas
         height={650}
-        width={1400}
+        width={1536}
         ref={canvasRef}
       />
         
