@@ -94,13 +94,13 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
       const x=e.clientX
       const y=e.clientY
 
-        ctx.strokeStyle="rgba(255,255,255)"
-        ctx.beginPath();
-        ctx.moveTo(startX, startY + (y - startY) / 2);
-        ctx.bezierCurveTo(startX, startY, x, startY, x, startY + (y - startY) / 2);
-        ctx.bezierCurveTo(x, y, startX, y, startX, startY + (y - startY) / 2);
-        ctx.closePath();
-        ctx.stroke();
+      ctx.beginPath();
+      const cx = (startX + x) / 2;
+      const cy = (startY + y) / 2;
+      const rx = Math.abs(x - startX) / 2;  // radiusX
+      const ry = Math.abs(y - startY) / 2;  // radiusY
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.stroke();
 
 
       // ctx?.strokeRect(startX, startY, width, height)
