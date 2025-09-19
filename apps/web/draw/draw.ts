@@ -42,7 +42,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
     if(parsedData.type==="chat"){
       const data=JSON.parse(parsedData.message)
-      existingShapes.push(data.shape)
+      existingShapes.push(data)
       clearCanvas(existingShapes, canvas, ctx)
     }
   }
@@ -98,7 +98,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     }
 
   //if circle is selected
-    if(selectedShape==="circle"){
+    else if(selectedShape==="circle"){
           const x=e.clientX
           const y=e.clientY
 
