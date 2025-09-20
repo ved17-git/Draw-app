@@ -23,7 +23,11 @@ function Canvas({socket, id, shapes}:canvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedShape, setSelectedShape]=useState<"circle" | "rectangle" | "eraser">("circle")
 
-
+ 
+  useEffect(()=>{
+    //@ts-ignore
+    window.selectedShape=selectedShape
+  },[selectedShape])
 
 
   useEffect(() => {
@@ -31,9 +35,9 @@ function Canvas({socket, id, shapes}:canvasProps) {
     if(!canvasRef.current){
       return
     }
-    initializeDrawing(canvasRef.current, socket, id, shapes, selectedShape)
+    initializeDrawing(canvasRef.current, socket, id, shapes)
 
-  }, [canvasRef, id, shapes, socket,selectedShape]);
+  }, [canvasRef, id, shapes, socket]);
 
 
   

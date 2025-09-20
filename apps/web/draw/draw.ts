@@ -20,7 +20,7 @@ type Shapes=rectangle | circle
 type SelectedShapeType = "circle" | "rectangle" | "eraser";
 
 
-export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, shapes:Shapes[], selectedShape:SelectedShapeType)=>{
+export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, shapes:Shapes[], )=>{
 
     const ctx = canvas.getContext("2d");
      
@@ -29,10 +29,13 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     }
     
     console.log(shapes);
-    console.log(selectedShape);
     
     
     const existingShapes:Shapes[]=shapes
+
+
+
+    
 
 
           
@@ -42,7 +45,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
     if(parsedData.type==="chat"){
       const data=JSON.parse(parsedData.message)
-      existingShapes.push(data)
+      existingShapes.push(data.shape)
       clearCanvas(existingShapes, canvas, ctx)
     }
   }
@@ -72,13 +75,16 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
-  
-      //if rectangle is selected
+      
+      //@ts-ignore
+      const selectedShape=window.selectedShape
+      let shape:Shapes|null=null;
+
       if(selectedShape==="rectangle"){
         const width=e.clientX-startX
         const height=e.clientY-startY
 
-        const rectangle:Shapes={
+        shape={
           type:"rect",
           x:startX,
           y:startY,
@@ -86,15 +92,6 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
           height:height
       }
 
-      existingShapes.push(rectangle)
-
-        socket.send(JSON.stringify({
-        type:"chat",
-        message:JSON.stringify({
-          shape:rectangle
-        }),
-        roomId:id
-      }))
     }
 
   //if circle is selected
@@ -108,7 +105,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
           const ry = Math.abs(y - startY) / 2;
 
 
-          const circle:Shapes={
+          shape={
             type:"circle",
             cx,
             cy,
@@ -116,18 +113,23 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
             ry
           }
           
-          
-          existingShapes.push(circle)
-
-          socket.send(JSON.stringify({
-            type:"chat",
-            message:JSON.stringify({
-              shape:circle
-            }),
-            roomId:id
-          }))
         }
 
+        if(!shape){
+          return
+        }
+
+        existingShapes.push(shape)
+
+
+         
+        socket.send(JSON.stringify({
+        type:"chat",
+        message:JSON.stringify({
+          shape
+        }),
+        roomId:id
+      }))
   
   });
 
@@ -141,6 +143,8 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
       
       clearCanvas(existingShapes, canvas, ctx)
+       //@ts-ignore
+      const selectedShape=window.selectedShape
 
       if(selectedShape==="rectangle"){
           const width = currentX - startX;
@@ -152,7 +156,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
       // clearCanvas(existingShapes, canvas, ctx)
 
-      if(selectedShape=="circle"){
+      else if(selectedShape=="circle"){
         ctx.beginPath();
         const cx = (startX + currentX) / 2;
         const cy = (startY + currentY) / 2;
@@ -160,6 +164,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
         const ry = Math.abs(currentY - startY) / 2;  // radiusY
         ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
         ctx.stroke();
+        ctx.closePath()
       }
 
       
@@ -176,7 +181,7 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
   
      
 
-
+    
         existingShapes.forEach((shape) => {
           if (!shape) return; // guard against bad pushes
           ctx.strokeStyle = "rgba(255,255,255)"
@@ -188,6 +193,7 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
             ctx.beginPath()
             ctx.ellipse(shape.cx, shape.cy, shape.rx, shape.ry, 0, 0, Math.PI * 2)
             ctx.stroke()
+            ctx.closePath()
           }
         })
 
