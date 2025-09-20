@@ -25,7 +25,6 @@ function Canvas({socket, id, shapes}:canvasProps) {
 
  
   useEffect(()=>{
-    //@ts-ignore
     window.selectedShape=selectedShape
   },[selectedShape])
 

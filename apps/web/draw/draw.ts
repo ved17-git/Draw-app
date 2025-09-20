@@ -17,7 +17,12 @@ type circle={
 type Shapes=rectangle | circle
 
 
-type SelectedShapeType = "circle" | "rectangle" | "eraser";
+// type SelectedShapeType = "circle" | "rectangle" | "eraser";
+declare global {
+  interface Window {
+    selectedShape: "circle" | "rectangle" | "eraser";
+  }
+}
 
 
 export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, shapes:Shapes[], )=>{
@@ -76,7 +81,6 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
       
-      //@ts-ignore
       const selectedShape=window.selectedShape
       let shape:Shapes|null=null;
 
@@ -143,7 +147,6 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
       
       clearCanvas(existingShapes, canvas, ctx)
-       //@ts-ignore
       const selectedShape=window.selectedShape
 
       if(selectedShape==="rectangle"){
@@ -154,7 +157,6 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
           ctx.strokeStyle="rgba(255,255,255)"
       }
 
-      // clearCanvas(existingShapes, canvas, ctx)
 
       else if(selectedShape=="circle"){
         ctx.beginPath();
