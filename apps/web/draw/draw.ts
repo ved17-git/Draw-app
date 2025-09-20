@@ -1,3 +1,5 @@
+
+
 type rectangle={
   type:"rect",
   x:number,
@@ -37,7 +39,8 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     
     
     const existingShapes:Shapes[]=shapes
-
+  console.log(existingShapes);
+  
 
 
     
@@ -168,6 +171,31 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
         ctx.stroke();
         ctx.closePath()
       }
+
+      else if (selectedShape === "eraser") {
+        const filteredArr = existingShapes.filter((item) => {
+              if (item.type === "rect") {
+                return !(
+                  e.clientX >= item.x &&
+                  e.clientX <= item.x + item.width &&
+                  e.clientY >= item.y &&
+                  e.clientY <= item.y + item.height
+                );
+              }
+              // circle
+              const inside =
+                ((e.clientX - item.cx) ** 2) / (item.rx ** 2) +
+                ((e.clientY - item.cy) ** 2) / (item.ry ** 2) <= 1;
+              return !inside;
+            });
+
+            // keep the same array reference:
+            existingShapes.splice(0, existingShapes.length, ...filteredArr);
+
+            // redraw
+            clearCanvas(existingShapes, canvas, ctx);
+        }
+
 
       
     });
