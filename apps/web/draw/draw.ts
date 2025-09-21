@@ -173,9 +173,9 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
       }
 
 
-      else if(selectedShape=="pencil"){ 
+      // else if(selectedShape=="pencil"){ 
           
-      }
+      // }
 
       else if (selectedShape === "eraser") {
         const filteredArr = existingShapes.filter((item) => {

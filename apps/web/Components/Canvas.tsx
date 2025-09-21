@@ -5,7 +5,7 @@ import {useState} from 'react'
 import { FaRegCircle } from "react-icons/fa";
 import { RiRectangleLine } from "react-icons/ri";
 import { BsEraser } from "react-icons/bs";
-
+import { LuPencil } from "react-icons/lu";
 
 interface canvasProps{
   socket:WebSocket ,
@@ -21,7 +21,7 @@ interface canvasProps{
 function Canvas({socket, id, shapes}:canvasProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [selectedShape, setSelectedShape]=useState<"circle" | "rectangle" | "eraser">("circle")
+  const [selectedShape, setSelectedShape]=useState<"circle" | "rectangle" | "eraser" | "pencil">("circle")
 
  
   useEffect(()=>{
@@ -59,6 +59,11 @@ function Canvas({socket, id, shapes}:canvasProps) {
             <button className={selectedShape=='rectangle' ? "bg-green-400 p-3 rounded-full scale-115" : "bg-gray-200 p-3 rounded-full hover:scale-110 cursor-pointer transition-all ease-in-out" } 
             onClick={()=>setSelectedShape("rectangle")}>
             <RiRectangleLine />
+            </button>
+            
+             <button className={selectedShape=='pencil' ? "bg-green-400 p-3 rounded-full scale-115" : "bg-gray-200 p-3 rounded-full hover:scale-110 cursor-pointer transition-all ease-in-out" } 
+            onClick={()=>setSelectedShape("pencil")}>
+            <LuPencil />
             </button>
 
             <button className={selectedShape=='eraser' ? "bg-green-400 p-3 rounded-full scale-115" : "bg-gray-200 p-3 rounded-full hover:scale-110 cursor-pointer transition-all ease-in-out" } 

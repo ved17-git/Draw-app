@@ -9,7 +9,7 @@ import { BsEraser } from "react-icons/bs";
 
 function ShapesButton() {
    
-const [currentShape, setCurrentShape]=useState<"circle" | "rectangle" | "eraser" | null>(null)
+const [currentShape, setCurrentShape]=useState<"circle" | "rectangle" | "eraser" | "pencil"|null>(null)
 
 
 
@@ -26,10 +26,15 @@ const [currentShape, setCurrentShape]=useState<"circle" | "rectangle" | "eraser"
             <RiRectangleLine />
             </button>
 
+           <button className={currentShape=='pencil' ? "bg-green-400 p-3 rounded-full scale-115" : "bg-gray-200 p-3 rounded-full hover:scale-110 cursor-pointer transition-all ease-in-out" } 
+            onClick={()=>setCurrentShape("pencil")}>
+              <RiRectangleLine />
+            <BsEraser />
+            </button>
+
             <button className={currentShape=='eraser' ? "bg-green-400 p-3 rounded-full scale-115" : "bg-gray-200 p-3 rounded-full hover:scale-110 cursor-pointer transition-all ease-in-out" } 
             onClick={()=>setCurrentShape("eraser")}>
             <BsEraser />
-
             </button>
       </div>
     </>
