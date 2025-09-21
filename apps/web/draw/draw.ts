@@ -22,7 +22,7 @@ type Shapes=rectangle | circle
 // type SelectedShapeType = "circle" | "rectangle" | "eraser";
 declare global {
   interface Window {
-    selectedShape: "circle" | "rectangle" | "eraser";
+    selectedShape: "circle" | "rectangle" | "eraser" | "pencil";
   }
 }
 
@@ -172,6 +172,11 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
         ctx.closePath()
       }
 
+
+      else if(selectedShape=="pencil"){ 
+          
+      }
+
       else if (selectedShape === "eraser") {
         const filteredArr = existingShapes.filter((item) => {
               if (item.type === "rect") {
@@ -189,7 +194,6 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
               return !inside;
             });
 
-            // keep the same array reference:
             existingShapes.splice(0, existingShapes.length, ...filteredArr);
 
             // redraw
