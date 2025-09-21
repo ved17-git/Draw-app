@@ -192,6 +192,14 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
             // keep the same array reference:
             existingShapes.splice(0, existingShapes.length, ...filteredArr);
 
+      //   socket.send(JSON.stringify({
+      //   type:"chat",
+      //   // message:JSON.stringify({
+      //   //   shape
+      //   // }),
+      //   roomId:id
+      // }))
+
             // redraw
             clearCanvas(existingShapes, canvas, ctx);
         }

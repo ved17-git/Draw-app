@@ -59,7 +59,7 @@ console.log(`listening ws on ${port} joined user ${userId}`);
             if(parsedData.type==="join_room"){
                 const user=localDB.find(x => x.socket===socket)
                 user?.rooms.push(parsedData.roomId)
-                console.log(localDB.length);
+                console.log(localDB);
             }
 
             if(parsedData.type==="leave_room"){
@@ -69,9 +69,6 @@ console.log(`listening ws on ${port} joined user ${userId}`);
                 }
                 user.rooms = user.rooms.filter(room => room !== parsedData.roomId)
             }
-
-
-
 
             if(parsedData.type==="chat"){
 
@@ -94,8 +91,34 @@ console.log(`listening ws on ${port} joined user ${userId}`);
                             roomId
                         }))
                     }
+                    
                 }) 
             }
+
+
+            if (parsedData.type === "erase") {
+                        const roomId = parsedData.roomId;
+
+                        // 1) Remove the shape/chat row from DB
+                        // (use deleteMany to match your existing style)
+                        await db.chats.deleteMany({
+                            where: {
+                                id: parsedData.id
+                            }
+                        });
+
+                        // 2) Broadcast an "erase" to everyone in the same room
+                        localDB.forEach(x => {
+                            if (x.rooms.includes(parsedData.roomId)) {
+                                x.socket.send(JSON.stringify({
+                                    type: "erase",
+                                    id: parsedData.id,    // shape/chat id that was erased
+                                    roomId                // keep type consistent with "chat" broadcasts
+                            }));
+                        }
+                });
+            }
+
 
             
         })
