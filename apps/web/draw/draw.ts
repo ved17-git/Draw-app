@@ -38,7 +38,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     console.log(shapes);
     
     
-    const existingShapes:Shapes[]=shapes
+  let existingShapes:Shapes[]=shapes
   console.log(existingShapes);
   
 
@@ -48,15 +48,24 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 
           
 
-  socket.onmessage=(event)=>{
-    const parsedData=JSON.parse(event.data)
+socket.onmessage = (event) => {
+  const parsedData = JSON.parse(event.data);
 
-    if(parsedData.type==="chat"){
-      const data=JSON.parse(parsedData.message)
-      existingShapes.push(data.shape)
-      clearCanvas(existingShapes, canvas, ctx)
-    }
+  if (parsedData.type === "chat") {
+    const data = JSON.parse(parsedData.message);
+    const shapeWithId = { ...data.shape, id: parsedData.dbId }; // now shape has valid ID
+    existingShapes.push(shapeWithId);
+    clearCanvas(existingShapes, canvas, ctx);
   }
+
+  if (parsedData.type === "erase") {
+    // Remove shapes by dbId
+    const erasedIds = parsedData.ids;
+    existingShapes = existingShapes.filter(s => !erasedIds.includes(s.id));
+    clearCanvas(existingShapes, canvas, ctx);
+  }
+};
+
   
 
     
@@ -126,9 +135,7 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
           return
         }
 
-        existingShapes.push(shape)
-
-
+        // existingShapes.push(shape)
          
         socket.send(JSON.stringify({
         type:"chat",
@@ -137,6 +144,9 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
         }),
         roomId:id
       }))
+
+      console.log(existingShapes);
+      
   
   });
 
@@ -177,28 +187,43 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
           
       // }
 
-      else if (selectedShape === "eraser") {
-        const filteredArr = existingShapes.filter((item) => {
-              if (item.type === "rect") {
-                return !(
-                  e.clientX >= item.x &&
-                  e.clientX <= item.x + item.width &&
-                  e.clientY >= item.y &&
-                  e.clientY <= item.y + item.height
-                );
-              }
-              // circle
-              const inside =
-                ((e.clientX - item.cx) ** 2) / (item.rx ** 2) +
-                ((e.clientY - item.cy) ** 2) / (item.ry ** 2) <= 1;
-              return !inside;
-            });
+else if (selectedShape === "eraser") {
+  const erasedIds:any = [];
 
-            existingShapes.splice(0, existingShapes.length, ...filteredArr);
+  const filteredArr = existingShapes.filter((item) => {
+    if (item.type === "rect") {
+      const inside =
+        e.clientX >= item.x &&
+        e.clientX <= item.x + item.width &&
+        e.clientY >= item.y &&
+        e.clientY <= item.y + item.height;
 
-            // redraw
-            clearCanvas(existingShapes, canvas, ctx);
-        }
+      if (inside) erasedIds.push(item.id);  // collect rect id
+      return !inside;
+    }
+
+    // circle check
+    const inside =
+      ((e.clientX - item.cx) ** 2) / (item.rx ** 2) +
+      ((e.clientY - item.cy) ** 2) / (item.ry ** 2) <= 1;
+
+    if (inside) erasedIds.push(item.id); // collect circle id
+    return !inside;
+  });
+
+  existingShapes.splice(0, existingShapes.length, ...filteredArr);
+
+  if (erasedIds.length > 0) {
+    socket.send(JSON.stringify({
+      type: "erase",
+      ids: erasedIds,   // ✅ send array of erased shape ids
+      roomId: id
+    }));
+  }
+
+  clearCanvas(existingShapes, canvas, ctx);
+}
+
 
 
       

@@ -70,49 +70,59 @@ console.log(`listening ws on ${port} joined user ${userId}`);
                 user.rooms = user.rooms.filter(room => room !== parsedData.roomId)
             }
 
-            if(parsedData.type==="chat"){
+                if (parsedData.type === "chat") {
+                    const roomId = Number(parsedData.roomId);
 
-                const roomId = String(parsedData.roomId)
-                
-                    await db.chats.create({
-                        data:{
-                            roomId:Number(roomId),
-                            userId:userId,
-                            message:parsedData.message
+                    // save in DB
+                    const saved = await db.chats.create({
+                        data: {
+                            roomId,
+                            userId,
+                            message: parsedData.message
                         }
-                    })
+                    });
 
-               
-                localDB.forEach(x=>{
-                    if(x.rooms.includes(parsedData.roomId)){
-                        x.socket.send(JSON.stringify({
-                            type:"chat",
-                            message:parsedData.message,
-                            roomId
-                        }))
-                    }
-                    
-                }) 
-            }
+                    // broadcast to everyone in the room with dbId
+                    localDB.forEach(x => {
+                        if (x.rooms.includes(roomId)) {
+                            x.socket.send(JSON.stringify({
+                                type: "chat",
+                                message: parsedData.message,
+                                dbId: saved.id,  // ✅ send DB id back
+                                roomId
+                            }));
+                        }
+                    });
+                }
+
 
 
             if (parsedData.type === "erase") {
-                        const roomId = parsedData.roomId;
+                        const roomId = Number(parsedData.roomId);
+                        const ids = parsedData.ids;
+                   //erasing but not the shapes 
+                        if (!ids || ids.length === 0) {
+                            return; // nothing to delete
+                        }
 
-                        // 1) Remove the shape/chat row from DB
-                        // (use deleteMany to match your existing style)
-                        await db.chats.deleteMany({
+                        try {
+                            await db.chats.deleteMany({
                             where: {
-                                id: parsedData.id
+                                id: { in: parsedData.ids }
                             }
-                        });
+                            });
+                        } catch (e) {
+                            console.log(e);
+                            
+                        }
+                           
 
                         // 2) Broadcast an "erase" to everyone in the same room
                         localDB.forEach(x => {
                             if (x.rooms.includes(parsedData.roomId)) {
                                 x.socket.send(JSON.stringify({
                                     type: "erase",
-                                    id: parsedData.id,    // shape/chat id that was erased
+                                    ids: parsedData.ids,    // shape/chat id that was erased
                                     roomId                // keep type consistent with "chat" broadcasts
                             }));
                         }

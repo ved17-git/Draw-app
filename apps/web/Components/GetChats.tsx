@@ -21,18 +21,27 @@ async function GetChats({id}:{id:number}) {
     const cookieStore=await cookies()
     const token=cookieStore.get('token')?.value
     
+    const s=data.chats.map((x:{id:number, message:string})=>{
+      const msgData = JSON.parse(x.message);
+      const temp={
+       id:x.id,
+       ...msgData.shape //combining {id:121, type:"rect", x:132...} like that
+      } 
+      return temp
+    })
+    console.log(s);
+    
     
 const shapes = data.chats.map((x: { message: string }) => {
     const msgData = JSON.parse(x.message);
     return msgData.shape;
 });
 
-console.log(shapes);
 
 
   return (
     <>
-      <SendChats shapes={shapes} token={token} id={id}/>
+      <SendChats shapes={s} token={token} id={id}/>
     </>
   );
 }
