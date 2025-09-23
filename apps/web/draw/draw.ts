@@ -1,36 +1,5 @@
-type rectangle={
-  type:"rect",
-  x:number,
-  y:number,
-  height:number,
-  width:number
-  id?:number
-}
+import type { Shapes } from "../types/shapes"
 
-type circle={
-  type:"circle",
-  cx:number,
-  cy:number,
-  rx:number,
-  ry:number
-  id?:number
-}
-
-type path={
-  type:"path",
-  points:{x:number, y:number}[]
-  id?:number
-}
-
-type Shapes = rectangle | circle | path
-
-
-
-declare global {
-  interface Window {
-    selectedShape: "circle" | "rectangle" | "eraser" | "pencil";
-  }
-}
 
 
 export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, shapes:Shapes[], )=>{

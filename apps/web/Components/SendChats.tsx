@@ -3,17 +3,11 @@ import React from "react";
 import { useSocket } from "../hooks/useSocket";
 import {useEffect} from 'react'
 import Canvas from "./Canvas";
-
-interface shapesTypes{
-  type:string,
-  x:number,
-  y:number,
-  width:number
-  height:number
-}
+import type { Shapes } from "../types/shapes";
 
 
-function SendChats({token, shapes, id}:{token?:string, shapes:shapesTypes[], id:number }) {
+
+function SendChats({token, shapes, id}:{token?:string, shapes:Shapes[], id:number }) {
 
   const {socket}=useSocket(token)
 

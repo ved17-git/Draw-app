@@ -6,11 +6,14 @@ import { FaRegCircle } from "react-icons/fa";
 import { RiRectangleLine } from "react-icons/ri";
 import { BsEraser } from "react-icons/bs";
 import { LuPencil } from "react-icons/lu";
+import type { Shapes } from "../types/shapes";
+
+
 
 interface canvasProps{
   socket:WebSocket ,
   id:number
-  shapes:any
+  shapes:Shapes[]
 }
 
 
@@ -22,7 +25,9 @@ function Canvas({socket, id, shapes}:canvasProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedShape, setSelectedShape]=useState<"circle" | "rectangle" | "eraser" | "pencil">("circle")
-
+   
+  console.log(shapes);
+  
  
   useEffect(()=>{
     window.selectedShape=selectedShape
