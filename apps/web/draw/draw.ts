@@ -4,6 +4,7 @@ type rectangle={
   y:number,
   height:number,
   width:number
+  id?:number
 }
 
 type circle={
@@ -12,14 +13,17 @@ type circle={
   cy:number,
   rx:number,
   ry:number
+  id?:number
 }
 
 type path={
   type:"path",
   points:{x:number, y:number}[]
+  id?:number
 }
 
-type Shapes=rectangle | circle | path
+type Shapes = rectangle | circle | path
+
 
 
 declare global {
@@ -189,22 +193,30 @@ socket.onmessage = (event) => {
         ctx.closePath()
       }
 
+
       else if (selectedShape === "pencil" && isDrawing) {
         currentPath.push({ x: currentX, y: currentY });
         ctx.beginPath();
         ctx.strokeStyle = "rgba(255,255,255)";
         ctx.lineWidth = 2;
-        ctx.moveTo(currentPath[0].x, currentPath[0].y);
-        for (let i = 1; i < currentPath.length; i++) {
-            ctx.lineTo(currentPath[i].x, currentPath[i].y);
+
+        // Add a check to ensure the array is not empty
+        if (currentPath.length > 0) {
+          ctx.moveTo(currentPath[0]!.x, currentPath[0]!.y);
+          for (let i = 1; i < currentPath.length; i++) {
+              ctx.lineTo(currentPath[i]!.x, currentPath[i]!.y);
+          }
         }
+
         ctx.stroke();
         ctx.closePath();
       }
 
+
+
 // The eraser logic in your mousemove event listener
 else if (selectedShape === "eraser") {
-    const erasedIds:any = [];
+    const erasedIds:number[] = [];
 
     const filteredArr = existingShapes.filter((item) => {
         if (item.type === "rect") {
@@ -214,7 +226,7 @@ else if (selectedShape === "eraser") {
               e.clientY >= item.y &&
               e.clientY <= item.y + item.height;
 
-            if (inside) erasedIds.push(item.id);
+            if (inside) erasedIds.push(item.id!);
             return !inside;
         }
 
@@ -223,7 +235,7 @@ else if (selectedShape === "eraser") {
                 ((e.clientX - item.cx) ** 2) / (item.rx ** 2) +
                 ((e.clientY - item.cy) ** 2) / (item.ry ** 2) <= 1;
 
-            if (inside) erasedIds.push(item.id);
+            if (inside) erasedIds.push(item.id!);
             return !inside;
         }
 
@@ -232,16 +244,16 @@ else if (selectedShape === "eraser") {
             // Re-draw the path to check if the point is within its stroke
             ctx.beginPath();
             ctx.lineWidth = 10; // Use a wider line to make erasing easier
-            ctx.moveTo(item.points[0].x, item.points[0].y);
+            ctx.moveTo(item.points[0]!.x, item.points[0]!.y);
             for (let i = 1; i < item.points.length; i++) {
-                ctx.lineTo(item.points[i].x, item.points[i].y);
+                ctx.lineTo(item.points[i]!.x, item.points[i]!.y);
             }
 
             // The isPointInStroke() method checks if the point is on the stroke of the current path.
             const inside = ctx.isPointInStroke(e.clientX, e.clientY);
             ctx.closePath();
             
-            if (inside) erasedIds.push(item.id);
+            if (inside) erasedIds.push(item.id!);
             return !inside;
         }
 
@@ -282,17 +294,19 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
           if (shape.type === "rect") {
             ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
           } 
+          
           else if (shape.type === "circle") {
             ctx.beginPath()
             ctx.ellipse(shape.cx, shape.cy, shape.rx, shape.ry, 0, 0, Math.PI * 2)
             ctx.stroke()
             ctx.closePath()
           }
+
           else if (shape.type === "path") {
             ctx.beginPath();
-            ctx.moveTo(shape.points[0].x, shape.points[0].y);
+            ctx.moveTo(shape.points[0]!.x, shape.points[0]!.y);
             for (let i = 1; i < shape.points.length; i++) {
-                ctx.lineTo(shape.points[i].x, shape.points[i].y);
+                ctx.lineTo(shape.points[i]!.x, shape.points[i]!.y);
             }
             ctx.stroke();
             ctx.closePath();
