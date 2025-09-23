@@ -8,9 +8,6 @@ export const login=async(previousState:unknown, formData:FormData):Promise<strin
 const email=formData.get("email")
 const password=formData.get("password")
 
-console.log(email,password);
-
-
 
 const res = await fetch(`${BACKEND_URL}/login`,{
     method:"POST",
@@ -34,5 +31,27 @@ cookieStore.set("token",data.token,{
 })
 
 redirect('/')
+}
+
+
+export const signUp=async(previousState:unknown ,formData:FormData):Promise<string |void>=>{
+
+  const username=formData.get("username")
+  const email=formData.get("email")
+  const password=formData.get("password")
+
+  const res=await fetch(`${BACKEND_URL}/signUp`,{
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({username,email,password})
+  })
+
+  if(!res.ok){
+    return "SignUp error"
+  }
+  redirect('/login')
+
 
 }
