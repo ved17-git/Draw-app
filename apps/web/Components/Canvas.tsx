@@ -81,11 +81,13 @@ function Canvas({socket, id, shapes}:canvasProps) {
 
 
     
+    <div className="overflow-hidden h-screen"> 
       <canvas
-        height={650}
-        width={1536}
-        ref={canvasRef}
+        height={window.innerHeight}
+        width={window.innerWidth}
+        ref={canvasRef}      
       />
+    </div>
         
 
     </>

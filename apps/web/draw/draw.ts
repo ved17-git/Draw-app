@@ -21,12 +21,16 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
 socket.onmessage = (event) => {
   const parsedData = JSON.parse(event.data);
 
-  if (parsedData.type === "chat") {
-    const data = JSON.parse(parsedData.message);
-    const shapeWithId = { ...data.shape, id: parsedData.dbId }; // now shape has valid ID
-    existingShapes.push(shapeWithId);          //push here
+if (parsedData.type === "chat") {
+  const data = JSON.parse(parsedData.message);
+  const shapeWithId: Shapes = { ...data.shape, id: parsedData.dbId };
+
+  // Prevent duplicate push if we already have this id
+  if (!existingShapes.some(s => s.id === shapeWithId.id)) {
+    existingShapes.push(shapeWithId);
     clearCanvas(existingShapes, canvas, ctx);
   }
+}
 
   if (parsedData.type === "erase") {
     // Remove shapes by dbId
@@ -61,6 +65,8 @@ socket.onmessage = (event) => {
   
 
     canvas.addEventListener("mouseup", (e) => {
+      
+      
       clicked = false;
       const selectedShape=window.selectedShape
       let shape:Shapes|null=null;

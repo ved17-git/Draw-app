@@ -27,7 +27,6 @@ async function InRoom({ params }: { params: Promise<{ name: string }> }) {
        <div>
           <GetChats id={data?.exists?.id}/>
        </div>
-      <div>Currently in Room {name}</div>
 
     </>
   );

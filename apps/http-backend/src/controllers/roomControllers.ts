@@ -100,7 +100,7 @@ export const getChats=async(req:NewRequest,res:Response)=>{
        where:{
          roomId:roomId
        },
-       take:50
+       take:150
     })
 
     res.status(200).json({
