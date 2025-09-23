@@ -1,5 +1,3 @@
-
-
 type rectangle={
   type:"rect",
   x:number,
@@ -16,10 +14,14 @@ type circle={
   ry:number
 }
 
-type Shapes=rectangle | circle
+type path={
+  type:"path",
+  points:{x:number, y:number}[]
+}
+
+type Shapes=rectangle | circle | path
 
 
-// type SelectedShapeType = "circle" | "rectangle" | "eraser";
 declare global {
   interface Window {
     selectedShape: "circle" | "rectangle" | "eraser" | "pencil";
@@ -39,13 +41,8 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
     
     
   let existingShapes:Shapes[]=shapes
-  console.log(existingShapes);
-  
-
-
-    
-
-
+  let currentPath: {x:number, y:number}[] = [];
+  let isDrawing = false;
           
 
 socket.onmessage = (event) => {
@@ -54,7 +51,7 @@ socket.onmessage = (event) => {
   if (parsedData.type === "chat") {
     const data = JSON.parse(parsedData.message);
     const shapeWithId = { ...data.shape, id: parsedData.dbId }; // now shape has valid ID
-    existingShapes.push(shapeWithId);
+    existingShapes.push(shapeWithId);          //push here
     clearCanvas(existingShapes, canvas, ctx);
   }
 
@@ -68,10 +65,7 @@ socket.onmessage = (event) => {
 
   
 
-    
-   
-
-
+  
 
     clearCanvas(existingShapes, canvas, ctx)
 
@@ -83,16 +77,18 @@ socket.onmessage = (event) => {
 
     canvas.addEventListener("mousedown", (e) => {
       clicked = true;
-      
       startX = e.clientX;
       startY = e.clientY;
+      if (window.selectedShape === "pencil") {
+          isDrawing = true;
+          currentPath = [{ x: startX, y: startY }];
+      }
     });
    
   
 
     canvas.addEventListener("mouseup", (e) => {
       clicked = false;
-      
       const selectedShape=window.selectedShape
       let shape:Shapes|null=null;
 
@@ -111,25 +107,36 @@ socket.onmessage = (event) => {
     }
 
   //if circle is selected
-    else if(selectedShape==="circle"){
-          const x=e.clientX
-          const y=e.clientY
+      else if(selectedShape==="circle"){
+              const x=e.clientX
+              const y=e.clientY
 
-          const cx = (startX + x) / 2;
-          const cy = (startY + y) / 2;
-          const rx = Math.abs(x - startX) / 2;  
-          const ry = Math.abs(y - startY) / 2;
+              const cx = (startX + x) / 2;
+              const cy = (startY + y) / 2;
+              const rx = Math.abs(x - startX) / 2;  
+              const ry = Math.abs(y - startY) / 2;
 
 
-          shape={
-            type:"circle",
-            cx,
-            cy,
-            rx,
-            ry
-          }
-          
+              shape={
+                type:"circle",
+                cx,
+                cy,
+                rx,
+                ry
+              }
+              
+      }
+
+      else if (selectedShape === "pencil") {
+        if (currentPath.length > 1) {
+            shape = {
+                type: "path",
+                points: currentPath
+            };
         }
+        isDrawing = false;
+        currentPath = [];
+      }
 
         if(!shape){
           return
@@ -153,7 +160,7 @@ socket.onmessage = (event) => {
 
 
     canvas.addEventListener("mousemove", (e) => {
-      if (!clicked) return;
+      if (!clicked && !isDrawing) return;
 
         const currentX = e.clientX;
         const currentY = e.clientY;
@@ -182,51 +189,77 @@ socket.onmessage = (event) => {
         ctx.closePath()
       }
 
+      else if (selectedShape === "pencil" && isDrawing) {
+        currentPath.push({ x: currentX, y: currentY });
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(255,255,255)";
+        ctx.lineWidth = 2;
+        ctx.moveTo(currentPath[0].x, currentPath[0].y);
+        for (let i = 1; i < currentPath.length; i++) {
+            ctx.lineTo(currentPath[i].x, currentPath[i].y);
+        }
+        ctx.stroke();
+        ctx.closePath();
+      }
 
-      // else if(selectedShape=="pencil"){ 
-          
-      // }
-
+// The eraser logic in your mousemove event listener
 else if (selectedShape === "eraser") {
-  const erasedIds:any = [];
+    const erasedIds:any = [];
 
-  const filteredArr = existingShapes.filter((item) => {
-    if (item.type === "rect") {
-      const inside =
-        e.clientX >= item.x &&
-        e.clientX <= item.x + item.width &&
-        e.clientY >= item.y &&
-        e.clientY <= item.y + item.height;
+    const filteredArr = existingShapes.filter((item) => {
+        if (item.type === "rect") {
+            const inside =
+              e.clientX >= item.x &&
+              e.clientX <= item.x + item.width &&
+              e.clientY >= item.y &&
+              e.clientY <= item.y + item.height;
 
-      if (inside) erasedIds.push(item.id);  // collect rect id
-      return !inside;
+            if (inside) erasedIds.push(item.id);
+            return !inside;
+        }
+
+        else if (item.type === "circle") {
+            const inside =
+                ((e.clientX - item.cx) ** 2) / (item.rx ** 2) +
+                ((e.clientY - item.cy) ** 2) / (item.ry ** 2) <= 1;
+
+            if (inside) erasedIds.push(item.id);
+            return !inside;
+        }
+
+        // --- PENCIL CHECK ---
+        else if (item.type === "path") {
+            // Re-draw the path to check if the point is within its stroke
+            ctx.beginPath();
+            ctx.lineWidth = 10; // Use a wider line to make erasing easier
+            ctx.moveTo(item.points[0].x, item.points[0].y);
+            for (let i = 1; i < item.points.length; i++) {
+                ctx.lineTo(item.points[i].x, item.points[i].y);
+            }
+
+            // The isPointInStroke() method checks if the point is on the stroke of the current path.
+            const inside = ctx.isPointInStroke(e.clientX, e.clientY);
+            ctx.closePath();
+            
+            if (inside) erasedIds.push(item.id);
+            return !inside;
+        }
+
+        return true; // Keep shapes of other types
+    });
+
+    existingShapes.splice(0, existingShapes.length, ...filteredArr);
+
+    if (erasedIds.length > 0) {
+        socket.send(JSON.stringify({
+            type: "erase",
+            ids: erasedIds,
+            roomId: id
+        }));
     }
 
-    // circle check
-    const inside =
-      ((e.clientX - item.cx) ** 2) / (item.rx ** 2) +
-      ((e.clientY - item.cy) ** 2) / (item.ry ** 2) <= 1;
-
-    if (inside) erasedIds.push(item.id); // collect circle id
-    return !inside;
-  });
-
-  existingShapes.splice(0, existingShapes.length, ...filteredArr);
-
-  if (erasedIds.length > 0) {
-    socket.send(JSON.stringify({
-      type: "erase",
-      ids: erasedIds,   // ✅ send array of erased shape ids
-      roomId: id
-    }));
-  }
-
-  clearCanvas(existingShapes, canvas, ctx);
+    clearCanvas(existingShapes, canvas, ctx);
 }
-
-
-
-      
     });
 }
 
@@ -244,6 +277,7 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
         existingShapes.forEach((shape) => {
           if (!shape) return; // guard against bad pushes
           ctx.strokeStyle = "rgba(255,255,255)"
+          ctx.lineWidth = 2;
 
           if (shape.type === "rect") {
             ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
@@ -254,6 +288,15 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
             ctx.stroke()
             ctx.closePath()
           }
+          else if (shape.type === "path") {
+            ctx.beginPath();
+            ctx.moveTo(shape.points[0].x, shape.points[0].y);
+            for (let i = 1; i < shape.points.length; i++) {
+                ctx.lineTo(shape.points[i].x, shape.points[i].y);
+            }
+            ctx.stroke();
+            ctx.closePath();
+        }
         })
 
 }

@@ -31,12 +31,6 @@ async function GetChats({id}:{id:number}) {
     })
     console.log(s);
     
-    
-const shapes = data.chats.map((x: { message: string }) => {
-    const msgData = JSON.parse(x.message);
-    return msgData.shape;
-});
-
 
 
   return (
