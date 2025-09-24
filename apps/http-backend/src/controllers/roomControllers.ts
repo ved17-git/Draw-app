@@ -49,6 +49,45 @@ export const createRoom=async(req:NewRequest,res:Response)=>{
 }
 
 
+export const getRooms=async(req:NewRequest,res:Response)=>{
+    
+    const userId=req.userId as number
+    console.log(userId);
+    
+    try {
+
+        const room=await db.rooms.findMany({
+            where:{
+               userId:userId
+            }
+        })
+
+        if(room){
+            res.status(200).json({
+                room
+            })
+            return
+        }
+        else{
+            res.status(200).json({
+                msg:"no rooms found"
+            })
+            return
+        }
+
+    
+    } catch (e) {
+        console.log(e);
+            res.status(400).json({
+                msg:"api error"
+            })
+        return
+    }
+
+}
+
+
+
 export const joinRoom=async(req:NewRequest,res:Response)=>{
 
     const name=req.params.room
