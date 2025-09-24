@@ -30,7 +30,7 @@ cookieStore.set("token",data.token,{
     maxAge:60*60*3
 })
 
-redirect('/')
+redirect('/dashboard')
 }
 
 

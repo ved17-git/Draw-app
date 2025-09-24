@@ -8,6 +8,7 @@ import { Label } from "../../../Components/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../Components/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../Components/components/ui/tabs"
 import { Palette, Users, Zap } from "lucide-react"
+import Link from "next/link";
 
 function Login() {
    
@@ -17,16 +18,6 @@ function Login() {
 
   return (
     <>
-      <div>Login</div>
-
-            {/* <form action={action}>
-                <input type="email" name="email" placeholder="email" />
-                <input type="password" name="password" placeholder="password" />
-                <button type="submit" className="bg-black text-white p-2 rounded-xl">
-                {isLoading? "Loading...":"Login"}
-                </button>
-                {data? data:null}
-            </form> */}
 
 
 
@@ -34,12 +25,12 @@ function Login() {
       <div className="w-full max-w-md space-y-8">
         {/* Logo and branding */}
         <div className="text-center space-y-4">
-          <div className="flex items-center justify-center space-x-2">
+          <Link href='/' className="flex items-center justify-center space-x-2">
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <Palette className="w-6 h-6 text-primary-foreground" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">DrawSync</h1>
-          </div>
+          </Link>
           <p className="text-muted-foreground text-balance">Collaborative canvas drawing in real-time</p>
         </div>
 
