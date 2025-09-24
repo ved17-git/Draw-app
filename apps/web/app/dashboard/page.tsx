@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import { createRoom } from './actions'
 import { useState } from "react"
 import { Button } from "../../Components/components/ui/button"
 import { Input } from "../../Components/components/ui/input"
@@ -17,7 +18,8 @@ import { Badge } from "../../Components/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "../../Components/components/ui/avatar"
 import { Plus, Users, Clock, Palette, Settings, LogOut, Search, Copy, ExternalLink } from "lucide-react"
 import Link from "next/link"
-import Image from 'next/image'
+import { useActionState } from 'react'
+
 
 
 
@@ -35,8 +37,8 @@ function Dashboard() {
 
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-  const [newRoomName, setNewRoomName] = useState("")
-  const [newRoomDescription, setNewRoomDescription] = useState("")
+
+   const [roomData, roomAction, isLoading]=useActionState(createRoom, undefined)
 
   // Mock data for rooms
   const [rooms, setRooms] = useState<Room[]>([
@@ -71,25 +73,6 @@ function Dashboard() {
       thumbnail: "/architecture-blueprints.jpg",
     },
   ])
-
-  const handleCreateRoom = () => {
-    if (newRoomName.trim()) {
-      const newRoom: Room = {
-        id: Date.now().toString(),
-        name: newRoomName,
-        description: newRoomDescription,
-        participants: 1,
-        maxParticipants: 8,
-        isActive: true,
-        lastActivity: "Just now",
-        thumbnail: "/blank-canvas.png",
-      }
-      setRooms([newRoom, ...rooms])
-      setNewRoomName("")
-      setNewRoomDescription("")
-      setIsCreateDialogOpen(false)
-    }
-  }
 
   const filteredRooms = rooms.filter(
     (room) =>
@@ -159,6 +142,7 @@ function Dashboard() {
 
           <div className="flex gap-2">
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+               
               <DialogTrigger asChild>
                 <Button className="bg-primary hover:bg-primary/90">
                   <Plus className="w-4 h-4 mr-2" />
@@ -170,37 +154,32 @@ function Dashboard() {
                   <DialogTitle>Create New Room</DialogTitle>
                   <DialogDescription>Set up a new collaborative drawing room for your team.</DialogDescription>
                 </DialogHeader>
+             <form action={roomAction}>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="room-name">Room Name</Label>
                     <Input
                       id="room-name"
+                      type='name'
+                      name="name"
+                      required
                       placeholder="Enter room name"
-                      value={newRoomName}
-                      onChange={(e) => setNewRoomName(e.target.value)}
                       className="bg-input border-border"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="room-description">Description (Optional)</Label>
-                    <Input
-                      id="room-description"
-                      placeholder="What will you be working on?"
-                      value={newRoomDescription}
-                      onChange={(e) => setNewRoomDescription(e.target.value)}
-                      className="bg-input border-border"
-                    />
-                  </div>
+
                   <div className="flex gap-2 pt-4">
-                    <Button onClick={handleCreateRoom} className="flex-1 bg-primary hover:bg-primary/90">
-                      Create Room
+                    <Button type='submit' className="flex-1 bg-primary hover:bg-primary/90">
+                      {isLoading ? "Creating...": "Create Room"}
                     </Button>
                     <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)} className="border-border">
                       Cancel
                     </Button>
                   </div>
                 </div>
+                </form>
               </DialogContent>
+              
             </Dialog>
 
             <Button variant="outline" className="border-border bg-transparent">
@@ -210,7 +189,7 @@ function Dashboard() {
         </div>
 
         {/* Rooms Grid */}
-        <div className="space-y-6">
+        {/* <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold text-foreground">Your Rooms</h3>
             <p className="text-sm text-muted-foreground">
@@ -243,13 +222,7 @@ function Dashboard() {
               {filteredRooms.map((room) => (
                 <Card key={room.id} className="room-card group cursor-pointer">
                   <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
-                    <Image
-                      width={100}
-                      height={100}
-                      src={room.thumbnail || "/placeholder.svg"}
-                      alt={room.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                    />
+
                   </div>
                   <CardHeader className="space-y-2">
                     <div className="flex items-start justify-between">
@@ -302,7 +275,7 @@ function Dashboard() {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
       </main>
     </div>
   )

@@ -6,6 +6,7 @@ export const createRoom=async(req:NewRequest,res:Response)=>{
 
     const {name}=req.body
     const userId=req.userId as number
+    
 
     try {
 

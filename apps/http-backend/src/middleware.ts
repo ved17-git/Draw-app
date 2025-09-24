@@ -6,6 +6,7 @@ import { JWT_SECRET } from '@repo/backend-common/config'
 export const middleware=(req:NewRequest,res:Response,next:NextFunction)=>{
 
  const authHeader=req.headers.authorization
+ 
 
  if(!authHeader || !authHeader.startsWith('Bearer ')){
     res.status(200).json({
@@ -14,12 +15,11 @@ export const middleware=(req:NewRequest,res:Response,next:NextFunction)=>{
     return
  }
  const token=authHeader.split(' ')[1];
-
-
+ 
 
  try {
 
-     if(!token){
+   if(!token){
     res.status(200).json({
     msg:"token not found"
     })
