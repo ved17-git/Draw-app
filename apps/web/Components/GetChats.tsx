@@ -6,10 +6,15 @@ import { cookies } from "next/headers";
 
 async function GetChats({id, name}:{id:number, name:string}) {
 
-    
+    const cookieStore=await cookies()
+    const token=cookieStore.get('token')?.value
+
+  
+
     const res=await fetch(`${BACKEND_URL}/chats/${id}`,{
         method:"GET",
         headers:{
+            "Authorization":`Bearer ${token}`,
             "Content-Type":"application/json"
         }
     })
@@ -18,8 +23,9 @@ async function GetChats({id, name}:{id:number, name:string}) {
         return <div>Fetching error </div>
     }
     const data=await res.json()    
-    const cookieStore=await cookies()
-    const token=cookieStore.get('token')?.value
+
+
+    
     
     const s=data.chats.map((x:{id:number, message:string})=>{
       const msgData = JSON.parse(x.message);

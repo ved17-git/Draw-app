@@ -21,6 +21,7 @@ import Link from "next/link"
 import { useActionState } from 'react'
 import { logout } from 'app/(auth)/logout/action'
 import { getRoomId } from 'Components/JoinRoom/action'
+import { Spinner } from 'Components/components/ui/spinner'
 
 
 interface existingRoomsTypes{
@@ -67,12 +68,12 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
-              <Button variant="ghost" size="sm">
+              {/* <Button variant="ghost" size="sm">
                 <Settings className="w-4 h-4" />
-              </Button>
+              </Button> */}
               <form action={logoutAction}>
               <Button type='submit' variant="destructive" size="sm">
-                {isPending? "pending...":<LogOut className="w-4 h-4"/> }
+                {isPending? <> <Spinner className="text-white" size="small" /> </>:<LogOut className="w-4 h-4"/> }
               </Button>
               {logoutData? logoutData:null}
               </form>
@@ -132,13 +133,13 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
 
                   <div className="flex gap-2 pt-4">
                     <Button type='submit' className="flex-1 bg-primary hover:bg-primary/90">
-                      {isLoading ? "Creating...": "Create Room"}
+                      {isLoading ? <> Creating... <Spinner className="text-white" /> </>: "Create Room"}
                     </Button>
                     <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)} className="border-border">
                       Cancel
-                    </Button>
-                    {roomData ? roomData : null}
+                    </Button>  
                   </div>
+                  {roomData ? roomData : null}
                 </div>
                 </form>
               </DialogContent>
@@ -172,7 +173,7 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
                   </div>
                   <div className="flex gap-2 pt-4">
                     <Button className="flex-1 bg-primary hover:bg-primary/90">
-                      {joinRoomLoading? "Joining...": "Join Room"}
+                      {joinRoomLoading? <> Joining... <Spinner className="text-white"/> </>: "Join Room"}
                     </Button>
                   </div>
                   {joinRoomData? joinRoomData : null}

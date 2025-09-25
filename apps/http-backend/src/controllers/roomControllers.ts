@@ -52,7 +52,6 @@ export const createRoom=async(req:NewRequest,res:Response)=>{
 export const getRooms=async(req:NewRequest,res:Response)=>{
     
     const userId=req.userId as number
-    console.log(userId);
     
     try {
 
@@ -134,13 +133,14 @@ export const joinRoom=async(req:NewRequest,res:Response)=>{
 export const getChats=async(req:NewRequest,res:Response)=>{
     
     const roomId=Number(req.params.roomId)
-
+    console.log(roomId);
+    
     try {
     const chats=await db.chats.findMany({
        where:{
          roomId:roomId
        },
-       take:150
+       take:400
     })
 
     res.status(200).json({

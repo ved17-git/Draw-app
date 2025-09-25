@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../..
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../Components/components/ui/tabs"
 import { Palette, Users, Zap } from "lucide-react"
 import Link from "next/link";
+import { Spinner } from "Components/components/ui/spinner";
 
 function Login() {
    
@@ -72,7 +73,7 @@ function Login() {
                     />
                   </div>
                   <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? <> Signing In...<Spinner className="text-white" /> </>: "Login"}
                   </Button>
                   {loginData ? loginData : null}
                 </form>
@@ -113,8 +114,8 @@ function Login() {
                       className="bg-input border-border"
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isLoading}>
-                    {isPending ? "Creating account..." : "Create Account"}
+                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90" >
+                    {isPending ?  <> Creating Account <Spinner className="text-white" /> </>: "Create Account"}
                   </Button>
                   {signUpData? signUpData :null}
                 </form>

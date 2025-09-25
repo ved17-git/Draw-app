@@ -10,5 +10,5 @@ import { middleware } from '../middleware'
 roomRouter.post('/createRoom',middleware, createRoom)
 roomRouter.get('/getRooms', middleware, getRooms)
 
-roomRouter.get('/chats/:roomId', getChats)
-roomRouter.get('/joinRoom/:room', joinRoom)
+roomRouter.get('/chats/:roomId',  middleware, getChats)
+roomRouter.get('/joinRoom/:room', middleware, joinRoom)
