@@ -4,7 +4,7 @@ import SendChats from "./SendChats";
 import { cookies } from "next/headers";
 
 
-async function GetChats({id}:{id:number}) {
+async function GetChats({id, name}:{id:number, name:string}) {
 
     
     const res=await fetch(`${BACKEND_URL}/chats/${id}`,{
@@ -35,7 +35,7 @@ async function GetChats({id}:{id:number}) {
 
   return (
     <>
-      <SendChats shapes={s} token={token} id={id}/>
+      <SendChats shapes={s} token={token} id={id} name={name}/>
     </>
   );
 }

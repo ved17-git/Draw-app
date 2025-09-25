@@ -4,14 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated theme colors to match the dark tech aesthetic from design inspiration */
   --background: oklch(0.08 0 0);
   --foreground: oklch(0.98 0 0);
   --card: oklch(0.12 0 0);
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.12 0 0);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.7 0.15 280);
+  --primary: oklch(0.6 0.23 145);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.18 0 0);
   --secondary-foreground: oklch(0.98 0 0);
@@ -47,7 +46,7 @@
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.12 0 0);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.7 0.15 280);
+  --primary: oklch(0.6 0.23 145);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.18 0 0);
   --secondary-foreground: oklch(0.98 0 0);

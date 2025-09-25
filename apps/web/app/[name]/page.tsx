@@ -25,7 +25,7 @@ async function InRoom({ params }: { params: Promise<{ name: string }> }) {
     <>
        
        <div>
-          <GetChats id={data?.exists?.id}/>
+          <GetChats id={data?.exists?.id} name={name}/>
        </div>
 
     </>

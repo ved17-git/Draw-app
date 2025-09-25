@@ -19,6 +19,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../Components/components
 import { Plus, Palette, Settings, LogOut, Search, ExternalLink} from "lucide-react"
 import Link from "next/link"
 import { useActionState } from 'react'
+import { logout } from 'app/(auth)/logout/action'
+import { getRoomId } from 'Components/JoinRoom/action'
 
 
 interface existingRoomsTypes{
@@ -34,9 +36,11 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
     
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false)
 
-  const [roomData, roomAction, isLoading]=useActionState(createRoom, undefined)
-
+  const [roomData, createRoomAction, isLoading]=useActionState(createRoom, undefined)
+  const [logoutData, logoutAction, isPending]=useActionState(logout,undefined)
+  const [joinRoomData, joinRoomAction, joinRoomLoading]=useActionState(getRoomId, undefined)
     
   const filteredRooms = existingRooms.filter((room) => room.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
@@ -56,18 +60,22 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
                 <h1 className="text-xl font-bold text-foreground">DrawSync</h1>
               </Link>
             </div>
-
+           
+           
             <div className="flex items-center space-x-4">
               <Avatar className="w-8 h-8">
-                <AvatarImage src="/diverse-user-avatars.png" />
+                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
               <Button variant="ghost" size="sm">
                 <Settings className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm">
-                <LogOut className="w-4 h-4" />
+              <form action={logoutAction}>
+              <Button type='submit' variant="destructive" size="sm">
+                {isPending? "pending...":<LogOut className="w-4 h-4"/> }
               </Button>
+              {logoutData? logoutData:null}
+              </form>
             </div>
           </div>
         </div>
@@ -97,11 +105,9 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
           </div>
 
           <div className="flex gap-2">
-            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-               
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>             
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90">
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Button variant="outline" className="border-border bg-transparent">
                   Create Room
                 </Button>
               </DialogTrigger>
@@ -110,7 +116,7 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
                   <DialogTitle>Create New Room</DialogTitle>
                   <DialogDescription>Set up a new collaborative drawing room for your team.</DialogDescription>
                 </DialogHeader>
-             <form action={roomAction}>
+             <form action={createRoomAction}>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="room-name">Room Name</Label>
@@ -136,17 +142,49 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
                 </div>
                 </form>
               </DialogContent>
-              
             </Dialog>
 
-            <Button variant="outline" className="border-border bg-transparent">
-              Join Room
-            </Button>
+          <Dialog open={isJoinDialogOpen} onOpenChange={setIsJoinDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Join Room
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-card border-border">
+                <DialogHeader>
+                  <DialogTitle>Join Room</DialogTitle>
+                  <DialogDescription>
+                    Enter the room name to join an existing collaborative drawing session.
+                  </DialogDescription>
+                </DialogHeader>
+                <form action={joinRoomAction}>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="join-room-name">Room Name</Label>
+                    <Input
+                      id="join-room-name"
+                      name="name"
+                      placeholder="Enter room name to join"
+                      className="bg-input border-border"
+                     
+                    />
+                  </div>
+                  <div className="flex gap-2 pt-4">
+                    <Button className="flex-1 bg-primary hover:bg-primary/90">
+                      {joinRoomLoading? "Joining...": "Join Room"}
+                    </Button>
+                  </div>
+                  {joinRoomData? joinRoomData : null}
+                </div>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
 
-                  {filteredRooms.length === 0 ? (
+          {filteredRooms.length === 0 ? (
             <Card className="room-card text-center py-12">
               <CardContent className="space-y-4">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto">
@@ -179,7 +217,7 @@ function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
                       <Link href={`/${room.name}`}>
                         <Button className="bg-primary hover:bg-primary/90">
                           <ExternalLink className="w-4 h-4 mr-2" />
-                          Join Room
+                          Enter Room
                         </Button>
                       </Link>
                     </div>

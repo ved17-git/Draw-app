@@ -7,7 +7,7 @@ import type { Shapes } from "../types/shapes";
 
 
 
-function SendChats({token, shapes, id}:{token?:string, shapes:Shapes[], id:number }) {
+function SendChats({token, shapes, id, name}:{token?:string, shapes:Shapes[], id:number, name:string }) {
 
   const {socket}=useSocket(token)
 
@@ -42,7 +42,7 @@ function SendChats({token, shapes, id}:{token?:string, shapes:Shapes[], id:numbe
 
   return (
     <>
-       <Canvas socket={socket} id={id} shapes={shapes}/>
+       <Canvas socket={socket} id={id} shapes={shapes} name={name}/>
     </>
   );
 }
