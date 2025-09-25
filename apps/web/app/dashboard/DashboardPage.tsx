@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "../../Components/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "../../Components/components/ui/avatar"
-import { Plus, Palette, Settings, LogOut, Search, ExternalLink} from "lucide-react"
+import { Plus, Palette, LogOut, Search, ExternalLink} from "lucide-react"
 import Link from "next/link"
 import { useActionState } from 'react'
 import { logout } from 'app/(auth)/logout/action'
