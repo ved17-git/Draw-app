@@ -1,6 +1,8 @@
 "use server"
 import { BACKEND_URL } from "app/config"
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export const createRoom=async(previousState:unknown, formData:FormData)=>{
 
@@ -26,7 +28,11 @@ export const createRoom=async(previousState:unknown, formData:FormData)=>{
     }
     const data=await res.json()
     if(data){
-        return "success"
+        revalidatePath('/dashboard')
+    }
+    else{
+        return data
     }
     
 }
+

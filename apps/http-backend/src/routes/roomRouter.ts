@@ -8,7 +8,7 @@ import { getRooms } from '../controllers/roomControllers'
 import { middleware } from '../middleware'
 
 roomRouter.post('/createRoom',middleware, createRoom)
-roomRouter.get('/getRooms',middleware, getRooms)
+roomRouter.get('/getRooms', middleware, getRooms)
 
 roomRouter.get('/chats/:roomId', getChats)
 roomRouter.get('/joinRoom/:room', joinRoom)

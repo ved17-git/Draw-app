@@ -16,7 +16,7 @@ export const middleware=(req:NewRequest,res:Response,next:NextFunction)=>{
  }
  const token=authHeader.split(' ')[1];
  
-
+ 
  try {
 
    if(!token){
