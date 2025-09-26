@@ -11,7 +11,6 @@ export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:
         return
     }
     
-    console.log(shapes);
     
     
   let existingShapes:Shapes[]=shapes

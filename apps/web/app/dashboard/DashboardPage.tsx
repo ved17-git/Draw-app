@@ -32,7 +32,6 @@ interface existingRoomsTypes{
 
 function AllRooms({existingRooms}:{existingRooms:existingRoomsTypes[]}) {
 
-  console.log(existingRooms);
   
     
   const [searchQuery, setSearchQuery] = useState("")
