@@ -26,6 +26,7 @@ async function InRoom({ params }: { params: Promise<{ name: string }> }) {
 
   const data=await res.json()
   
+  console.log(data);
   
   
 

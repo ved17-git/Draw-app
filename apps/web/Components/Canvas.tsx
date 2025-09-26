@@ -31,6 +31,7 @@ function Canvas({socket, id, shapes, name}:canvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedShape, setSelectedShape]=useState<"circle" | "rectangle" | "eraser" | "pencil">("circle")
    
+  console.log(shapes);
   
  
   useEffect(()=>{

@@ -59,6 +59,7 @@ console.log(`listening ws on ${port} joined user ${userId}`);
             if(parsedData.type==="join_room"){
                 const user=localDB.find(x => x.socket===socket)
                 user?.rooms.push(parsedData.roomId)
+                console.log(localDB);
             }
 
             if(parsedData.type==="leave_room"){
