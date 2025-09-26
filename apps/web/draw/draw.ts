@@ -2,6 +2,7 @@ import type { Shapes } from "../types/shapes"
 
 
 
+
 export const initializeDrawing=(canvas:HTMLCanvasElement, socket:WebSocket , id:number, shapes:Shapes[], )=>{
 
     const ctx = canvas.getContext("2d");
@@ -66,7 +67,9 @@ if (parsedData.type === "chat") {
 
     canvas.addEventListener("mouseup", (e) => {
       
-      
+      if(!clicked){
+        return
+      }
       clicked = false;
       const selectedShape=window.selectedShape
       let shape:Shapes|null=null;
@@ -289,3 +292,5 @@ const clearCanvas=(existingShapes:Shapes[], canvas:HTMLCanvasElement, ctx:Canvas
         })
 
 }
+
+

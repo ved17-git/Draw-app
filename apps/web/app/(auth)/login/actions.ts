@@ -27,7 +27,7 @@ const data=await res.json()
 const cookieStore=await cookies()
 cookieStore.set("token",data.token,{
     httpOnly:true,
-    maxAge:60*60*3
+    maxAge:60*60*48
 })
 
 redirect('/dashboard')
