@@ -18,12 +18,12 @@ export const createRoom=async(previousState:unknown, formData:FormData)=>{
         },
        body:JSON.stringify({name})
     })
-    
-    if(!res.ok){
-        return "Create room error"
-    }
     const data=await res.json()
-    if(data){
+
+    if(!res.ok){
+        return data.msg
+    }
+    else if(data){
         revalidatePath('/dashboard')
     }
     else{

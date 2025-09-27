@@ -17,12 +17,12 @@ const res = await fetch(`${BACKEND_URL}/login`,{
     body:JSON.stringify({email,password})
 })
 
+const data=await res.json()
+
 
 if(!res.ok){
-  return "Login error"
+  return data.msg
 }
-
-const data=await res.json()
 
 const cookieStore=await cookies()
 cookieStore.set("token",data.token,{
@@ -47,9 +47,10 @@ export const signUp=async(previousState:unknown ,formData:FormData):Promise<stri
     },
     body:JSON.stringify({username,email,password})
   })
-
+  
+  const data=await res.json()
   if(!res.ok){
-    return "SignUp error"
+    return data.msg
   }
   redirect('/login')
 

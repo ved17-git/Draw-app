@@ -4,7 +4,7 @@ import { userRouter } from './routes/userRoutes';
 import {roomRouter} from './routes/roomRouter'
 
 
-require('dotenv').config()
+// require('dotenv').config()
 
 
 const app=express();
