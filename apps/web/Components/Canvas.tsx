@@ -53,7 +53,7 @@ function Canvas({socket, id, shapes, name}:canvasProps) {
 
   const copyRoomName = async () => {
     try {
-      await navigator.clipboard.writeText(name)
+      await navigator.clipboard.writeText(decodeURIComponent(name))
       setIsCopied(true)
       setTimeout(() => setIsCopied(false), 2000)
     } catch (err) {
@@ -102,7 +102,7 @@ function Canvas({socket, id, shapes, name}:canvasProps) {
         title="Click to copy room name"
       >
         <div className="flex items-center space-x-2 bg-card/80 backdrop-blur-sm border border-border rounded-lg px-3 py-2 hover:bg-card/90 transition-all duration-200">
-          <span className="text-sm font-medium text-foreground">{name}</span>
+          <span className="text-sm font-medium text-foreground"> {decodeURIComponent(name)}</span>
           {isCopied ? (
             <Check className="w-4 h-4 text-green-500" />
           ) : (

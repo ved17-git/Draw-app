@@ -21,7 +21,7 @@ async function InRoom({ params }: { params: Promise<{ name: string }> }) {
   })
 
   if(!res.ok){
-      return "dawg"
+      return "Room not found"
   }
 
   const data=await res.json()
