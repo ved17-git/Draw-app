@@ -19,7 +19,10 @@ jobs:
        chmod 700 draw_ssh.pem
        ssh -o StrictHostKeyChecking=no -i draw_ssh.pem ubuntu@13.233.186.182 "
        cd Draw-app
+       git reset --hard
+       git clean -fd
        source ~/.bashrc
        git pull origin main
+       ls
        "
      
