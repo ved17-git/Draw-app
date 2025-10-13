@@ -18,6 +18,9 @@ jobs:
        echo "${{secrets.DRAW_BACKEND_SSH}}" > draw_ssh.pem
        chmod 700 draw_ssh.pem
        ssh -o StrictHostKeyChecking=no -i draw_ssh.pem ubuntu@13.201.33.162 "
-       ls
+       cd Draw-app
+       source ~/.bashrc
+       git pull origin main
+       npm run build
        "
      
