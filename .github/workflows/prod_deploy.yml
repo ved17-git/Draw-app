@@ -17,10 +17,9 @@ jobs:
      run: |
        echo "${{secrets.DRAW_BACKEND_SSH}}" > draw_ssh.pem
        chmod 700 draw_ssh.pem
-       ssh -o StrictHostKeyChecking=no -i draw_ssh.pem ubuntu@13.201.33.162 "
+       ssh -o StrictHostKeyChecking=no -i draw_ssh.pem ubuntu@13.233.186.182 "
        cd Draw-app
        source ~/.bashrc
        git pull origin main
-       npm run build
        "
      
