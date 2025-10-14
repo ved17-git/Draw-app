@@ -23,6 +23,8 @@ jobs:
        git clean -fd
        source ~/.bashrc
        git pull origin main
+       cd apps/http-backend
+       pm2 restart ./dist/index.js --name http-backend & cd ..
        ls
        "
      
