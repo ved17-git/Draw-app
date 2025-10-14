@@ -24,8 +24,10 @@ jobs:
        source ~/.bashrc
        git pull origin main
        cd apps/http-backend
+       npm run build
        pm2 restart ./dist/index.js --name http-backend & cd ..
        cd ws-backend
+       npm run build
        pm2 restart ./dist/index.js --name ws-backend
        "
      
