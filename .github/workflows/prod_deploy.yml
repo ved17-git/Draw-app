@@ -25,7 +25,7 @@ jobs:
        git pull origin main
        cd apps/http-backend
        pm2 restart ./dist/index.js --name http-backend & cd ..
-       cd apps/ws-backend
+       cd ws-backend
        pm2 restart ./dist/index.js --name ws-backend
        "
      
