@@ -19,7 +19,7 @@ app.use('/', roomRouter)
 
 app.get("/", (req,res)=>{
     res.json({
-        msg:"dawg"
+        msg:"testing  / route"
     })
 })
 
