@@ -1,33 +1,33 @@
-name: Deploy to Production
+# name: Deploy to Production
 
-on:
- push:
-  branches: [main]
+# on:
+#  push:
+#   branches: [main]
 
-jobs:
- build:
-  name: deploy on ec2
-  runs-on: ubuntu-latest
+# jobs:
+#  build:
+#   name: deploy on ec2
+#   runs-on: ubuntu-latest
 
-  steps:
-   - name: checkout
-     uses: actions/checkout@v5
+#   steps:
+#    - name: checkout
+#      uses: actions/checkout@v5
 
-   - name: SSH into machine and Start
-     run: |
-       echo "${{secrets.DRAW_BACKEND_SSH}}" > draw_ssh.pem
-       chmod 700 draw_ssh.pem
-       ssh -o StrictHostKeyChecking=no -i draw_ssh.pem ubuntu@13.233.186.182 "
-       cd Draw-app
-       git reset --hard
-       git clean -fd
-       source ~/.bashrc
-       git pull origin main
-       cd apps/http-backend
-       npm run build
-       pm2 restart ./dist/index.js --name http-backend & cd ..
-       cd ws-backend
-       npm run build
-       pm2 restart ./dist/index.js --name ws-backend
-       "
+#    - name: SSH into machine and Start
+#      run: |
+#        echo "${{secrets.DRAW_BACKEND_SSH}}" > draw_ssh.pem
+#        chmod 700 draw_ssh.pem
+#        ssh -o StrictHostKeyChecking=no -i draw_ssh.pem ubuntu@13.233.186.182 "
+#        cd Draw-app
+#        git reset --hard
+#        git clean -fd
+#        source ~/.bashrc
+#        git pull origin main
+#        cd apps/http-backend
+#        npm run build
+#        pm2 restart ./dist/index.js --name http-backend & cd ..
+#        cd ws-backend
+#        npm run build
+#        pm2 restart ./dist/index.js --name ws-backend
+#        "
      
